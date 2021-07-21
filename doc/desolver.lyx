@@ -1,0 +1,3664 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\begin_preamble
+\usepackage{listings}
+\def\lstlistingname{À…”‘¡}
+        \def\lstlistlistingname{–—œ√—¡ÃÃ¡‘¡}
+        \lstset{language=C++,
+%               backgroundcolor=\color{lightgray},
+                extendedchars=true,
+                showstringspaces=false,
+                stringstyle=\ttfamily,
+             %   caption=[ÀﬂÛÙ· \thelstlisting],
+              %  title=ÀﬂÛÙ· \thelstlisting,
+                frame=lines,
+ emptylines=0
+                }
+\end_preamble
+\language greek
+\inputencoding default
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing double 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+DeSolver: solving differential equations with grammatical evolution
+\layout Author
+
+Ioannis G.
+ Tsoulos I.E.
+ Lagaris
+\begin_inset Foot
+collapsed false
+
+\layout Standard
+
+Corresponding author: lagaris@cs.uoi.gr
+\end_inset 
+
+
+\layout Date
+
+Department of Computer Science, University of Ioannina
+\newline 
+P.O.
+ Box 1186, Ioannina 45110 - GREECE
+\layout Abstract
+
+DeSolver is a tool for solving ordinary and partial differential equations
+ based on grammatical evolution.
+ It is written entirely in ANSI C++, but the user can develop his part either
+ in C++ or in Fortran 77.
+ The solutions produces are in closed analytical form.
+ We describe the tool and we give some examples.
+\layout Standard
+
+
+\series bold 
+PACS
+\series default 
+: 02.30.Hq, 02.30.Jr, 02.60.Lj, 02.60.Pn
+\layout Section*
+
+PROGRAM SUMMARY
+\layout Standard
+\align left 
+
+\shape italic 
+Title of program
+\shape default 
+: DESOLVER
+\layout Standard
+\align left 
+
+\shape italic 
+Catalogue identifier
+\shape default 
+:
+\layout Standard
+\align left 
+
+\shape italic 
+Program available from
+\shape default 
+: CPC Program Library, Queen's University of Belfast, N.
+ Ireland.
+\layout Standard
+\align left 
+
+\shape italic 
+Computer for which the program is designed and others on which it has been
+ tested
+\shape default 
+: DESOLVER is designed for UNIX machines.
+ 
+\layout Standard
+\align left 
+
+\emph on 
+Installation
+\emph default 
+: University of Ioannina, Greece.
+\layout Standard
+\align left 
+
+\shape italic 
+Programming language used
+\shape default 
+: GNU-C++, GNU Fortran - 77.
+\layout Standard
+\align left 
+
+\emph on 
+Memory required to execute with typical data
+\emph default 
+: 1Megabyte.
+\layout Standard
+\align left 
+
+\shape italic 
+No.
+ of bits in a word
+\shape default 
+: 32
+\layout Standard
+\align left 
+
+\emph on 
+No.
+ of processors used
+\emph default 
+: 1
+\layout Standard
+\align left 
+
+\emph on 
+Has the code been vectorised or parallelized?
+\emph default 
+: No.
+\layout Standard
+\align left 
+
+\emph on 
+No.
+ of bytes in distributed program,including test data etc
+\emph default 
+.: 160 Kbytes.
+\layout Standard
+\align left 
+
+\emph on 
+Distribution format
+\emph default 
+: gzipped tar file.
+\layout Standard
+\align left 
+
+\emph on 
+Keywords
+\emph default 
+: Ordinary differential equations, Partial Differential equations, genetic
+ programming, grammatical evolution, optimization.
+\layout Standard
+\align left 
+
+\emph on 
+Nature of physical problem
+\emph default 
+: Analytical solution of ordinary differential equations, systems of them
+ as well as partial differential equations.
+\layout Standard
+\align left 
+
+\emph on 
+Method of solution
+\emph default 
+: The system utilizes the method of grammatical evolution.
+\layout Standard
+\align left 
+
+\emph on 
+Typical running time
+\emph default 
+: Depending on the complexity of the differential equation to be solved.
+\layout Section*
+
+LONG WRITE UP
+\layout Section
+
+Introduction
+\layout Standard
+
+The aim of this tool is to recover closed form analytical solutions of ordinary
+ differential equations (ODEs), systems of differential equations (SODEs)
+ and partial differential equations (PDEs).
+ The program is based on a method developed by our group and is described
+ in detail in 
+\begin_inset LatexCommand \cite{key-44}
+
+\end_inset 
+
+.
+ It relies on grammatical evolution, which is an evolutionary approach that
+ produces valid code in accord to a set of grammatical rules.
+ Grammatical evolution is detailed in 
+\begin_inset LatexCommand \cite{key-39,key-40,key-41}
+
+\end_inset 
+
+.
+ The tool is designed for UNIX systems equipped with the gnu C++ and Fortran
+ 77 (g77) compilers.
+\layout Standard
+
+The rest of this article is organized as follows: in section 2 we present
+ the contents of the distribution file, in section 3 the set of prerequisites
+ for the installation of the tool is presented, in section 4 we explain
+ the installation procedure of the DeSolver, in section 5 we present the
+ programming libraries developed for the DeSolver tool and the produced
+ binary files, in section 6 we present the codification scheme for the different
+ial equations and in section 7 we list some test runs from the application
+ of the programming tool.
+\layout Section
+
+Distribution
+\layout Standard
+
+The tool is distributed in a tar.gz file named 
+\family typewriter 
+DeSolver.tar.gz
+\family default 
+, a format which is recognized by almost all operating systems.
+ In a Unix system issuing the following commands:
+\layout Enumerate
+
+gunzip 
+\family typewriter 
+DeSolver.tar.gz
+\layout Enumerate
+
+tar xfv 
+\family typewriter 
+DeSolver.tar
+\layout Standard
+
+will create the directory 
+\family typewriter 
+Desolver
+\family default 
+ with the following subdirectories:
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+bin
+\family default 
+\series default 
+: Directory where the binaries will be installed.
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+doc
+\family default 
+\series default 
+: Directory containing the user manual (this file) in different formats
+ such as TeX, Postscript and PDF.
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+include
+\family default 
+\series default 
+: Directory where the include files and specifically the files with the
+ definition of the main classes of the tool will be installed.
+ 
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+lib
+\family default 
+\series default 
+: This directory is initially empty.
+ It will host the tool libraries following compilation.
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+libGT
+\family default 
+\series default 
+: Directory containing the 
+\family typewriter 
+libgt
+\family default 
+ library that arranges the grammatical evolution and the genetic operations.
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+libOde
+\family default 
+\series default 
+: Directory containing the library 
+\family typewriter 
+libode
+\family default 
+, used for the description of ODEs, SODEs and PDEs.
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+libParser
+\family default 
+\series default 
+: Directory containing the
+\family typewriter 
+ libparser
+\family default 
+ library, used for evaluating produced functions their derivatives.
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+OdeExamples
+\family default 
+\series default 
+: Directory containing examples of ODEs in C++ and in Fortran, with the
+ appropriate format as required by the 
+\family typewriter 
+libode
+\family default 
+ library.
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+PdeExamples
+\family default 
+\series default 
+: Directory containing examples of PDEs in C++ and in Fortran, with the
+ appropriate format as required by the 
+\family typewriter 
+libode
+\family default 
+ library.
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+SodeExamples
+\family default 
+\series default 
+: Directory containing examples of SODEs in C++ and in Fortran, with the
+ appropriate format as required by the 
+\family typewriter 
+libode
+\family default 
+ library.
+\layout Standard
+
+In the main 
+\family typewriter 
+DeSolver
+\family default 
+ directory there are the following files:
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+INSTALL
+\family default 
+\series default 
+: Text file describing the installation steps.
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+compile.bash
+\family default 
+\series default 
+: Script, that compiles the DeSolver, on UNIX systems running the bash shell.
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+variables.bash
+\family default 
+\series default 
+: Script to customize the .bashrc file.
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+compile.csh
+\family default 
+\series default 
+:Script, that compiles the DeSolver, on UNIX systems running the csh shell.
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+variables.csh
+\family default 
+\series default 
+: Script to customize the .cshrc file.
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+Makefile
+\family default 
+\series default 
+: It is the basic Makefile for the system.
+ 
+\layout Enumerate
+
+
+\family typewriter 
+\series bold 
+osname.pl
+\family default 
+\series default 
+: Small script in Perl , that prints the name of the host operating system.
+\layout Section
+
+Prerequisites
+\layout Standard
+
+The following software packages are required in order to compile the tool:
+\layout Enumerate
+
+
+\series bold 
+gnu-C++
+\series default 
+: The tool is written entirely in gnu C++.
+ The 
+\family typewriter 
+DeSolver
+\family default 
+ tool can not be compiled with other C++ compilers.
+\layout Enumerate
+
+
+\series bold 
+gnu-Fortran (g77)
+\series default 
+ : This is required only if the user wishes to write his equations in Fortran.
+\layout Enumerate
+
+
+\series bold 
+Perl
+\series default 
+: To install 
+\family typewriter 
+DeSolver
+\family default 
+ under UNIX, different makefiles are required for different UNIX versions.
+ This is facilitated via a provided, modified version of the tmake 
+\begin_inset LatexCommand \cite{key-42}
+
+\end_inset 
+
+ tool written in Perl.
+ The user can compile the entire system without the use of Perl and tmake,
+ but this procedure requires additional programming skills and effort.
+\layout Enumerate
+
+One of
+\series bold 
+ 
+\family typewriter 
+\series default 
+bash
+\family default 
+\series bold 
+ 
+\series default 
+or
+\series bold 
+ 
+\family typewriter 
+csh
+\family default 
+\series default 
+: All UNIX systems have one or more programming shells.
+ Among the most popular are the 
+\family typewriter 
+bash
+\family default 
+ and the 
+\family typewriter 
+csh
+\family default 
+ shell.
+ We include installation scripts for both shells, but any user with a little
+ experience in shell programming can port the installation scripts to other
+ shells as well.
+\layout Section
+
+Installation
+\layout Standard
+
+The steps for installing the 
+\family typewriter 
+DeSolver
+\family default 
+ tool are the following:
+\layout Enumerate
+
+Uncompress the distribution file as described in section 2.
+\layout Enumerate
+
+cd 
+\family typewriter 
+DeSolver
+\family default 
+.
+\layout Enumerate
+
+If in bash shell issue the commands
+\newline 
+
+\family typewriter 
+compile.bash
+\newline 
+variables.bash
+\layout Enumerate
+
+If in csh shell issue the commands
+\newline 
+
+\family typewriter 
+compile.csh
+\family default 
+
+\newline 
+
+\family typewriter 
+variables.csh
+\layout Standard
+
+The first command creates the appropriate Makefiles and builds the entire
+ system, while the second one adds the necessary lines to the main configuration
+ file of the corresponding shell.
+ This file is the 
+\family typewriter 
+.bashrc
+\family default 
+ in the main user directory for the 
+\family typewriter 
+bash
+\family default 
+ shell and the file .
+\family typewriter 
+cshrc
+\family default 
+ in the main user directory for the 
+\family typewriter 
+csh
+\family default 
+ shell.
+ The system has been successfully installed on GNU Linux systems, Solaris,
+ Freebsd, Openbsd and IRIX.
+\layout Section
+
+Detailed description
+\layout Subsection
+
+The libgt library
+\layout Standard
+
+The 
+\family typewriter 
+libgt
+\family default 
+ library consists of four classes and it is general enough to adapt in every
+ programming language given the BNF definition.
+ The first one is the GSymbol class, which represents the terminal and non
+ - terminal symbols of the BNF grammar.
+ The second class is the GRule class, which represents the production rules
+ of the BNF grammar.
+ The third class is the GProgram class, which represents programs in the
+ given BNF grammar.
+ Finally, the GPopulation class represents a population of chromosomes.
+ Each chromosome is an instance of the GProgram class, with a problem depended
+ fitness function.
+ The crossover is performed with one - point crossover and the selection
+ of parents for the crossover procedure is performed with the method of
+ tournament selection.
+ 
+\layout Subsection
+
+The libparser library
+\layout Standard
+
+The 
+\family typewriter 
+libparser
+\family default 
+ is used for the evaluation of the produced expressions and their first
+ and second derivatives.
+ The library contains two classes: the GDoubleStack class and the FunctionParser
+ class.
+ The first class is a stack of double values.
+ The Standard Template Library of GNU C++ is equipped with a template for
+ stacks, however we chose to write our own class, in order to accelerate
+ the operations of push and pop and to perform checks for the values prior
+ to the push operation.
+ The second class is the FunctionParser library 
+\begin_inset LatexCommand \cite{key-43}
+
+\end_inset 
+
+, with the addition of some methods for the evaluation of first and second
+ derivatives of the emerging expressions.
+ 
+\layout Subsection
+
+The libode library 
+\layout Standard
+
+The third library is the 
+\family typewriter 
+libode
+\family default 
+ program library.
+ This library contains three classes: the GOdeProgram, the GSodeProgram
+ and the GPdeProgram.
+ Every class inherits the GProgram class and implements the virtual fitness
+ method of the GProgram class.
+ The GOdeProgram class represents trial solutions for ODEs, the GSodeProgram
+ represents trial solutions for SODEs and the GPdeProgram class represents
+ trial solutions for PDEs.
+ In every class the user can pass as parameters through the corresponding
+ methods the elements of the differential equation to be solved or he can
+ pass as a parameter to the constructor method the location of the differential
+ equation in the file system.
+ The differential equation must be in shared library format and the formulation
+ of the equation for every case is presented in the following section.
+\layout Subsection
+
+Binary files
+\layout Standard
+
+We have created six driver programs for solving differential equations.
+ All the programs are located in the 
+\family typewriter 
+bin
+\family default 
+ directory.
+ The programs 
+\family typewriter 
+ode_simple
+\family default 
+ and
+\family typewriter 
+ ode_cmd
+\family default 
+ are appropriate for solving ODEs, the programs 
+\family typewriter 
+sode_simple
+\family default 
+ and
+\family typewriter 
+ sode_cmd
+\family default 
+ for solving SODEs and the programs 
+\family typewriter 
+pde_simple
+\family default 
+ and
+\family typewriter 
+ pde_cmd
+\family default 
+ for solving PDEs.
+ The programs with the suffix 
+\family typewriter 
+\series bold 
+simple
+\family default 
+\series default 
+ do not have any special command - line parameter.
+ They accept only an argument that specifies the location of the shared
+ library hosting the differential equation.
+ These programs have default values for the system parameters such as the
+ size of the genetic population or the selection rate and hence the user
+ must edit the programs in order to adjust them accordingly.
+ On the other hand, the programs with the suffix 
+\family typewriter 
+\series bold 
+cmd
+\family default 
+\series default 
+ are customizable and the user may specify the following parameters in the
+ command line:
+\layout Enumerate
+
+-
+\series bold 
+h:
+\series default 
+ A help screen for the parameters is presented.
+\layout Enumerate
+
+-
+\series bold 
+p path,
+\series default 
+ where path is the shared library hosting the differential equation to be
+ solved.
+\layout Enumerate
+
+-
+\series bold 
+c count
+\series default 
+, where count indicates the desired number of chromosomes in the population.
+ The default value is 1000.
+\layout Enumerate
+
+-
+\series bold 
+l len
+\series default 
+, where len is the size of each chromosome in the population.
+ The default size of the chromosomes is 50.
+\layout Enumerate
+
+-
+\series bold 
+r
+\series default 
+ 
+\series bold 
+sd
+\series default 
+, where sd is the seed for the random number generator .
+ The default value is 1000.
+ We use the function rand() from the standard library of C++.
+\layout Enumerate
+
+-
+\series bold 
+g
+\series default 
+ 
+\series bold 
+generations
+\series default 
+, where generations is the maximum number of generations allowed.
+ The default value for this parameter is 2000.
+\layout Enumerate
+
+-
+\series bold 
+e
+\series default 
+ 
+\series bold 
+eps
+\series default 
+, where eps is the threshold for the termination of the genetic algorithm.
+ If the best chromosome fitness falls below that threshold, then the system
+ stops creating generations.
+ The default value for this parameter is 
+\begin_inset Formula $10^{-7}$
+\end_inset 
+
+.
+\layout Enumerate
+
+-
+\series bold 
+s
+\series default 
+ 
+\series bold 
+srate
+\series default 
+, where srate is used as the selection rate of the population.
+ The user can specify values in the range [0,1].
+ The default value for this parameter is 0.1.
+\layout Enumerate
+
+-
+\series bold 
+m
+\series default 
+ 
+\series bold 
+mrate
+\series default 
+, where mrate is used as the mutation rate for the population.
+ The user can specify values in the range [0,1].
+ The default value for this parameter is 0.05.
+\layout Section
+
+User written subprograms
+\layout Standard
+
+The user can program his differential equations either in c++ or in Fortran.
+ In this section examples for each case (ODE, SODE and PDE) are presented.
+\layout Subsection
+
+Format for ODEs
+\layout Standard
+
+In figures 
+\begin_inset LatexCommand \ref{c++-ode}
+
+\end_inset 
+
+ and 
+\begin_inset LatexCommand \ref{fortran-ode}
+
+\end_inset 
+
+ we present the formulation for ODEs in the languages c++ and Fortran correspond
+ingly.
+ The listed functions have the following meaning:
+\layout Enumerate
+
+
+\family typewriter 
+getx0()
+\family default 
+: Returns the lower boundary point, 
+\begin_inset Formula $x_{0}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+getx1()
+\family default 
+: Returns the upper boundary point, 
+\begin_inset Formula $x_{1}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+getkind()
+\family default 
+: Returns 1,2 or 3.
+ Code 1 indicates that the ODE is of first order and the boundary condition
+ is of the form: 
+\begin_inset Formula $y(x_{0})=y_{0}$
+\end_inset 
+
+.
+ Code 2 indicates that the ODE is of second order with boundary conditions
+ of the form: 
+\begin_inset Formula $y(x_{0})=y_{0},\  y'(x_{0})=y'_{0}$
+\end_inset 
+
+.
+ Finally, code 3 indicates that the ODE is of second order with boundary
+ conditions of the form: 
+\begin_inset Formula $y(x_{0})=y_{0},\  y(x_{1})=y_{1}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+getnpoints()
+\family default 
+: Returns the number of training points.
+\layout Enumerate
+
+
+\family typewriter 
+getf0()
+\family default 
+: Returns the boundary condition on the left, 
+\begin_inset Formula $y_{0}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+getf1()
+\family default 
+: Returns the boundary condition on the right, 
+\begin_inset Formula $y_{1}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+getff0()
+\family default 
+: Returns the left boundary condition for second order ODEs 
+\begin_inset Formula $y'_{0}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+ode1ff(x,y,yy)
+\family default 
+: If the ODE is of first order, then the purpose of the tool is to minimize
+ the function 
+\begin_inset Formula $\mbox{ode1ff}(x,M(x),M'(x))$
+\end_inset 
+
+, for different values of 
+\begin_inset Formula $x$
+\end_inset 
+
+ in the range 
+\begin_inset Formula $[x_{0},x_{1}]$
+\end_inset 
+
+.
+ The function 
+\begin_inset Formula $M(x)$
+\end_inset 
+
+ is a function that arise from the procedure of grammatical evolution.
+ The parameter y represents 
+\begin_inset Formula $M(x)$
+\end_inset 
+
+ and the parameter yy represents 
+\begin_inset Formula $M'(x)$
+\end_inset 
+
+.
+ 
+\layout Enumerate
+
+
+\family typewriter 
+ode2ff(x,y,yy,yyy)
+\family default 
+: If the ODE is of second order, then the 
+\family typewriter 
+DeSolver
+\family default 
+ tries to minimize the function 
+\begin_inset Formula $\mbox{ode2ff}(x,M(x),M'(x),M''(x))$
+\end_inset 
+
+, for different values of 
+\begin_inset Formula $x$
+\end_inset 
+
+ in the range 
+\begin_inset Formula $[x_{0},x_{1}].$
+\end_inset 
+
+ As for 
+\family typewriter 
+ode1ff
+\family default 
+ the function 
+\begin_inset Formula $M(x)$
+\end_inset 
+
+ emerges from the process of grammatical evolution.
+ The parameter y represents 
+\begin_inset Formula $M(x)$
+\end_inset 
+
+, the parameter yy represents 
+\begin_inset Formula $M'(x)$
+\end_inset 
+
+ and the parameter yyy represents 
+\begin_inset Formula $M''(x)$
+\end_inset 
+
+.
+\layout Standard
+
+
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Caption
+
+Ode format in C++ 
+\begin_inset LatexCommand \label{c++-ode}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+extern
+\series default 
+ "C"
+\layout Standard
+
+
+\family typewriter 
+{
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+
+\series bold 
+double
+\series default 
+ getx0()
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+{
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+
+\series bold 
+double
+\series default 
+ getx1()
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+{
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+
+\series bold 
+int
+\series default 
+ getkind()
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+{
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+
+\series bold 
+int
+\series default 
+ getnpoints()
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+{
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+
+\series bold 
+double
+\series default 
+ getf0()
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+{
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+
+\series bold 
+double
+\series default 
+ getf1()
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+{
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+
+\series bold 
+double
+\series default 
+ getff0()
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+{
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+
+\series bold 
+double
+\series default 
+ ode1ff(
+\series bold 
+double
+\series default 
+ x,
+\series bold 
+double
+\series default 
+ y,
+\series bold 
+double
+\series default 
+ yy)
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+{
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+
+\series bold 
+double
+\series default 
+ ode2ff(
+\series bold 
+double
+\series default 
+ x,
+\series bold 
+double
+\series default 
+ y,
+\series bold 
+double
+\series default 
+ yy,
+\series bold 
+double
+\series default 
+ yyy) 
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+{
+\layout Standard
+
+
+\family typewriter 
+
+\begin_inset Formula $\quad$
+\end_inset 
+
+}
+\layout Standard
+
+
+\family typewriter 
+}
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Caption
+
+Ode format in Fortran
+\begin_inset LatexCommand \label{fortran-ode}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ getx0()
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ getx1()
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+integer function 
+\series default 
+getkind()
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+integer function 
+\series default 
+getnpoints()
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function 
+\series default 
+getf0()
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ getf1()
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ getff0()
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ ode1ff(x,y,yy)
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision
+\series default 
+ x,y,yy
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function 
+\series default 
+ode2ff(x,y,yy,yyy)
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision
+\series default 
+ x,y,yy,yyy
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\end_inset 
+
+
+\layout Standard
+
+The following steps simplify the way to add a new ODE:
+\layout Enumerate
+
+Code the ODE either in C++ format or in Fortran format and put the corresponding
+ file under the directory 
+\family typewriter 
+OdeExamples
+\family default 
+.
+\layout Enumerate
+
+Add the name of the ODE in the text file 
+\family typewriter 
+odelist
+\family default 
+ under the directory named 
+\family typewriter 
+OdeExamples
+\family default 
+.
+\layout Enumerate
+
+Execute the script 
+\family typewriter 
+makeodes.sh
+\family default 
+ in the same directory or run the command 
+\family typewriter 
+make
+\family default 
+ in the main directory of the distribution.
+\layout Standard
+
+The steps above will create a shared library for the equation to be solved
+ under the directory 
+\family typewriter 
+OdeExamples
+\family default 
+.
+ Usually, in UNIX systems the shared libraries have the extension .so to
+ their names.
+\layout Subsection
+
+Format for SODEs
+\layout Standard
+
+In figures 
+\begin_inset LatexCommand \ref{sode-c++}
+
+\end_inset 
+
+ and 
+\begin_inset LatexCommand \ref{sode-fortran}
+
+\end_inset 
+
+ we demonstrate the formulation of SODE's in c++ and in Fortran programming
+ languages correspondingly.
+ The functions used in those formulations have the following meanings:
+\layout Enumerate
+
+
+\family typewriter 
+getx0()
+\family default 
+: Returns the left boundary, 
+\begin_inset Formula $x_{0}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+getx1()
+\family default 
+: Returns the right boundary, 
+\begin_inset Formula $x_{1}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+getnode()
+\family default 
+: Returns the number of ODE's in the system (system size).
+\layout Enumerate
+
+
+\family typewriter 
+getnpoints()
+\family default 
+: Returns the number of the training points for the system of trial solutions.
+\layout Enumerate
+
+
+\family typewriter 
+systemfun(node,x,y,yy)
+\family default 
+ : For the SODE case, the aim of the 
+\family typewriter 
+DeSolver
+\family default 
+ is to minimize the function 
+\begin_inset Formula $\mbox{systemfun}(n,x,Y,Y')$
+\end_inset 
+
+ for values of 
+\begin_inset Formula $x$
+\end_inset 
+
+ in the range 
+\begin_inset Formula $[x_{0},x_{1}]$
+\end_inset 
+
+, where 
+\begin_inset Formula $n$
+\end_inset 
+
+ is the total number of equations in the system, 
+\begin_inset Formula $Y$
+\end_inset 
+
+ is a vector with elements the 
+\begin_inset Formula $n$
+\end_inset 
+
+ functions that are produced by the grammatical evolution evaluated at 
+\begin_inset Formula $x$
+\end_inset 
+
+ and 
+\begin_inset Formula $Y'$
+\end_inset 
+
+ is a vector with elements the first derivative of these 
+\begin_inset Formula $n$
+\end_inset 
+
+ equations evaluated at 
+\begin_inset Formula $x$
+\end_inset 
+
+.
+ The argument node represents the 
+\begin_inset Formula $n$
+\end_inset 
+
+, the double precision array y stands for the vector 
+\begin_inset Formula $Y$
+\end_inset 
+
+ and similar the double precision array yy represents the vector 
+\begin_inset Formula $Y'$
+\end_inset 
+
+.
+ 
+\layout Enumerate
+
+s
+\family typewriter 
+ystemf0(node,f0)
+\family default 
+: The argument node stands for the number of differential equations in the
+ system and the double precision array f0 with node elements represents
+ the vector holding the boundary conditions for each equation in the system.
+\layout Standard
+
+
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Caption
+
+Format for SODEs in C++
+\begin_inset LatexCommand \label{sode-c++}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+extern
+\series default 
+ "C" {
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ getx0() 
+\layout Standard
+
+
+\family typewriter 
+{ 
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double 
+\series default 
+getx1() 
+\layout Standard
+
+
+\family typewriter 
+{ 
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+int
+\series default 
+ getnode() 
+\layout Standard
+
+
+\family typewriter 
+{ 
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+int
+\series default 
+ getnpoints() 
+\layout Standard
+
+
+\family typewriter 
+{ 
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ systemfun(
+\series bold 
+int
+\series default 
+ node, 
+\series bold 
+double
+\series default 
+ x, 
+\series bold 
+double
+\series default 
+ *y, 
+\series bold 
+double
+\series default 
+ *yy) 
+\layout Standard
+
+
+\family typewriter 
+{
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+void
+\series default 
+ systemf0(
+\series bold 
+int
+\series default 
+ node,
+\series bold 
+double
+\series default 
+ *f0) 
+\layout Standard
+
+
+\family typewriter 
+{ 
+\layout Standard
+
+
+\family typewriter 
+}
+\layout Standard
+
+
+\family typewriter 
+}
+\family default 
+ 
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Caption
+
+Format for SODEs in Fortran
+\begin_inset LatexCommand \label{sode-fortran}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ getx0() 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ getx1() 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+integer function 
+\series default 
+getnode() 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+integer function 
+\series default 
+getnpoints() 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function 
+\series default 
+systemfun(node,x,y,yy) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+integer
+\series default 
+ node 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision 
+\series default 
+x 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision
+\series default 
+ y(node) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision
+\series default 
+ yy(node) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+integer function
+\series default 
+ systemf0(node,f0) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+integer
+\series default 
+ node 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision 
+\series default 
+f0(node) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end 
+\end_inset 
+
+
+\layout Standard
+
+Like the case of ODEs a similar procedure must be followed in order to add
+ a new SODE in the system.
+ The steps for this procedure has as follows:
+\layout Enumerate
+
+Code the SODE either in C++ format or in Fortran format and put the correspondin
+g file under the directory 
+\family typewriter 
+SOdeExamples
+\family default 
+.
+\layout Enumerate
+
+Add the name of the SODE in the text file 
+\family typewriter 
+sodelist
+\family default 
+ under the directory named 
+\family typewriter 
+SOdeExamples
+\family default 
+.
+\layout Enumerate
+
+Execute the script 
+\family typewriter 
+makesodes.sh
+\family default 
+ in the same directory or run the command 
+\family typewriter 
+make
+\family default 
+ in the main directory of the distribution.
+\layout Standard
+
+The steps above will create a shared library for the equation to be solved
+ under the directory 
+\family typewriter 
+SOdeExamples
+\family default 
+.
+ 
+\layout Subsection
+
+PDE format
+\layout Standard
+
+The system is capable of solving elliptic PDEs in two dimensions in a box
+ 
+\begin_inset Formula $[x_{0},x_{1}]\times[y_{0},y_{1}]$
+\end_inset 
+
+ with the Dirichlet boundary conditions 
+\begin_inset Formula $\Psi(x_{0},y)=f_{0}(y)$
+\end_inset 
+
+, 
+\begin_inset Formula $\Psi(x_{1},y)=f_{1}(y)$
+\end_inset 
+
+, 
+\begin_inset Formula $\Psi(x,y_{0})=g_{0}(x)$
+\end_inset 
+
+ and 
+\begin_inset Formula $\Psi(x,y_{1})=g_{1}(x)$
+\end_inset 
+
+.
+ In figures 
+\begin_inset LatexCommand \ref{pde-c++}
+
+\end_inset 
+
+ and 
+\begin_inset LatexCommand \ref{Fortran-PDE}
+
+\end_inset 
+
+ we can see the formulation of PDE's in c++ and Fortran programming languages.
+ The presented functions have the following representation:
+\layout Enumerate
+
+
+\family typewriter 
+getx0()
+\family default 
+: Returns the left boundary 
+\begin_inset Formula $x_{0}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+getx1()
+\family default 
+: Returns the right boundary 
+\begin_inset Formula $x_{1}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+gety0()
+\family default 
+: Returns the left boundary 
+\begin_inset Formula $y_{0}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+gety1()
+\family default 
+: Returns the right boundary 
+\begin_inset Formula $y_{1}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+getnpoints()
+\family default 
+: Returns the amount of interior training points for the PDE.
+ 
+\layout Enumerate
+
+
+\family typewriter 
+getbpoints()
+\family default 
+: Returns the amount of training points across each boundary of the PDE.
+\layout Enumerate
+
+
+\family typewriter 
+f0(y)
+\family default 
+: Returns the boundary condition 
+\begin_inset Formula $f_{0}(y)$
+\end_inset 
+
+ across 
+\begin_inset Formula $x=x_{0}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+f1(y)
+\family default 
+: Returns the boundary condition 
+\begin_inset Formula $f_{1}(y)$
+\end_inset 
+
+ across 
+\begin_inset Formula $x=x_{1}.$
+\end_inset 
+
+
+\layout Enumerate
+
+
+\family typewriter 
+g0(x)
+\family default 
+: Returns the boundary condition 
+\begin_inset Formula $g_{0}(x)$
+\end_inset 
+
+ across 
+\begin_inset Formula $y=y_{0}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+g1(x)
+\family default 
+: The function returns the boundary condition 
+\begin_inset Formula $g_{1}(x)$
+\end_inset 
+
+ across 
+\begin_inset Formula $y=y_{1}$
+\end_inset 
+
+.
+\layout Enumerate
+
+
+\family typewriter 
+pde(x,y,v,x1,y1,x2,y2)
+\family default 
+: For the PDE case 
+\family typewriter 
+DeSolver
+\family default 
+ minimizes the function 
+\begin_inset Formula $\mbox{pde}\left(x,y,M(x,y),\frac{\partial M(x,y)}{\partial x},\frac{\partial M(x,y)}{\partial y},\frac{\partial^{2}M(x,y)}{\partial x^{2}},\frac{\partial^{2}M(x,y)}{\partial y^{2}}\right)$
+\end_inset 
+
+, where 
+\begin_inset Formula $x\in[x_{0},x_{1}]$
+\end_inset 
+
+ and 
+\begin_inset Formula $y\in[y_{0},y_{1}].$
+\end_inset 
+
+ The function 
+\begin_inset Formula $M(x,y)$
+\end_inset 
+
+ arises from the grammatical evolution and corresponds to the v argument.
+ The argument x1 corresponds to the first derivative of 
+\begin_inset Formula $M(x,y)$
+\end_inset 
+
+ with respect to 
+\begin_inset Formula $x$
+\end_inset 
+
+, y1 corresponds to the first derivative of 
+\begin_inset Formula $M(x,y)$
+\end_inset 
+
+ with respect to y, x2 corresponds to the second derivative of 
+\begin_inset Formula $M(x,y)$
+\end_inset 
+
+ with respect to x and the y2 corresponds to the second derivative of 
+\begin_inset Formula $M(x,y)$
+\end_inset 
+
+ with respect to y.
+\layout Standard
+
+
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Caption
+
+Format for PDEs in C++
+\begin_inset LatexCommand \label{pde-c++}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+extern
+\series default 
+ "C" {
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ getx0() 
+\layout Standard
+
+
+\family typewriter 
+{ 
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ getx1() 
+\layout Standard
+
+
+\family typewriter 
+{
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ gety0() 
+\layout Standard
+
+
+\family typewriter 
+{ 
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ gety1() 
+\layout Standard
+
+
+\family typewriter 
+{
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+int
+\series default 
+ getnpoints() 
+\layout Standard
+
+
+\family typewriter 
+{ 
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+int
+\series default 
+ getbpoints() 
+\layout Standard
+
+
+\family typewriter 
+{ 
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ f0(
+\series bold 
+double
+\series default 
+ y) 
+\layout Standard
+
+
+\family typewriter 
+{
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ f1(
+\series bold 
+double
+\series default 
+ y) 
+\layout Standard
+
+
+\family typewriter 
+{ 
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ g0(
+\series bold 
+double
+\series default 
+ x) 
+\layout Standard
+
+
+\family typewriter 
+{ 
+\layout Standard
+
+
+\family typewriter 
+} 
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double 
+\series default 
+g1(
+\series bold 
+double
+\series default 
+ x) 
+\layout Standard
+
+
+\family typewriter 
+{
+\layout Standard
+
+
+\family typewriter 
+}
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ pde(
+\series bold 
+double
+\series default 
+ x, 
+\series bold 
+double
+\series default 
+ y, 
+\series bold 
+double
+\series default 
+ v, 
+\series bold 
+double
+\series default 
+ x1,
+\series bold 
+ double 
+\series default 
+y1,
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+
+\begin_inset Formula $\quad\quad\quad\quad$
+\end_inset 
+
+double
+\series default 
+ x2, 
+\series bold 
+double
+\series default 
+ y2) 
+\layout Standard
+
+
+\family typewriter 
+{ 
+\layout Standard
+
+
+\family typewriter 
+}
+\layout Standard
+
+
+\family typewriter 
+}
+\family default 
+ 
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Caption
+
+Format for PDEs in Fortran
+\begin_inset LatexCommand \label{Fortran-PDE}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function 
+\series default 
+getx0() 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ getx1() 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ gety0() 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ gety1() 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+integer function
+\series default 
+ getnpoints() 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+integer function
+\series default 
+ getbpoints() 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ f0(y) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision
+\series default 
+ y 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ f1(y) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision
+\series default 
+ y 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ g0(x) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision
+\series default 
+ x 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ g1(x) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision
+\series default 
+ x 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ pde(x,y,v,x1,y1,x2,y2) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision
+\series default 
+ x,y,v,x1,y1,x2,y2 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\series default 
+ 
+\end_inset 
+
+
+\layout Standard
+
+Similarly to the case of ODEs and SODEs, the following procedure must be
+ followed to add a new PDE in the system:
+\layout Enumerate
+
+Code the PDE either in C++ format or in Fortran format and put the corresponding
+ file under the directory 
+\family typewriter 
+PdeExamples
+\family default 
+.
+\layout Enumerate
+
+Add the name of the PDE in the text file 
+\family typewriter 
+pdelist
+\family default 
+ under the directory named 
+\family typewriter 
+PdeExamples
+\family default 
+.
+\layout Enumerate
+
+Execute the script 
+\family typewriter 
+makepdes.sh
+\family default 
+ in the same directory or run the command 
+\family typewriter 
+make
+\family default 
+ in the main directory of the distribution.
+\layout Standard
+
+The steps above will create a shared library for the equation to be solved
+ under the directory 
+\family typewriter 
+PdeExamples
+\family default 
+.
+ 
+\layout Section
+
+Test Runs
+\layout Subsection
+
+Ode example 
+\layout Standard
+
+Suppose that we want to solve the ordinary differential equation 
+\begin_inset Formula \[
+y''y'=-\frac{4}{x^{3}}\]
+
+\end_inset 
+
+with 
+\begin_inset Formula $y(1)=0,\  y'(1)=2$
+\end_inset 
+
+ and 
+\begin_inset Formula $x\in[1,2]$
+\end_inset 
+
+.
+ The exact solution is 
+\begin_inset Formula $y=\log(x^{2})$
+\end_inset 
+
+.
+ In figure 
+\begin_inset LatexCommand \ref{example-c++}
+
+\end_inset 
+
+ we see the formulation for this ODE expressed in the C++ programming language.
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Caption
+
+Codification of 
+\begin_inset Formula $y''y'=-\frac{4}{x^{3}}$
+\end_inset 
+
+ in c++
+\begin_inset LatexCommand \label{example-c++}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\family typewriter 
+# include <math.h> 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+extern
+\series default 
+ "C" {
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ getx0() {
+\series bold 
+ return 
+\series default 
+1.0; }
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ getx1() { 
+\series bold 
+return
+\series default 
+ 2.0; }
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+int
+\series default 
+ getkind() { 
+\series bold 
+return
+\series default 
+ 2; }
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+int
+\series default 
+ getnpoints() { 
+\series bold 
+return
+\series default 
+ 10; }
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ getf0() { 
+\series bold 
+return
+\series default 
+ 0.0; }
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ getff0() { 
+\series bold 
+return
+\series default 
+ 2.0; }
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ getf1() { 
+\series bold 
+return
+\series default 
+ 0.0;}
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ ode1ff(
+\series bold 
+double
+\series default 
+ x, 
+\series bold 
+double 
+\series default 
+y, 
+\series bold 
+double
+\series default 
+ yy) { 
+\series bold 
+return 
+\series default 
+0.0; }
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double
+\series default 
+ ode2ff(
+\series bold 
+double
+\series default 
+ x,
+\series bold 
+ double
+\series default 
+ y, 
+\series bold 
+double
+\series default 
+ yy, 
+\series bold 
+double
+\series default 
+ yyy)
+\layout Standard
+
+
+\family typewriter 
+{ 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+return 
+\series default 
+yyy*yy+4.0/(x*x*x); 
+\layout Standard
+
+
+\family typewriter 
+}
+\layout Standard
+
+
+\family typewriter 
+} 
+\end_inset 
+
+Suppose that the ODE is compiled in a file named 
+\family typewriter 
+exode.so
+\family default 
+ under the directory 
+\family typewriter 
+OdeExamples
+\family default 
+ of the distribution.
+ Under the 
+\family typewriter 
+bin
+\family default 
+ directory of the distribution we issue the command:
+\layout LyX-Code
+
+./ode_cmd -p ../OdeExamples/exode.so -r 1000
+\layout Standard
+
+In figure 
+\begin_inset LatexCommand \ref{ode_cmd-output}
+
+\end_inset 
+
+ the last line of the output of the above command is presented.
+ As we can see the ODE is solved exactly in five generations of the genetic
+ algorithm.
+\layout Standard
+
+
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Caption
+
+Output of the program ode_cmd 
+\begin_inset LatexCommand \label{ode_cmd-output}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\family typewriter 
+GENERATION:    5         FITNESS: -5.040895611e-31       SOLUTION: log(x*x)
+ 
+\end_inset 
+
+Note that solving ODEs of the form 
+\begin_inset Formula $y'=f(x)$
+\end_inset 
+
+ corresponds to performing the indefinite integration 
+\begin_inset Formula $\int f(x)dx$
+\end_inset 
+
+.
+ So, this method may be used as an integration tool as well.
+\layout Subsection
+
+Pde example
+\layout Standard
+
+Suppose that we want to find the solution of the partial differential equation
+ 
+\begin_inset Formula \[
+\nabla^{2}\Psi(x,y)=-2\Psi(x,y)\]
+
+\end_inset 
+
+with 
+\begin_inset Formula $x\in[0,1],\  y\in[0,1]$
+\end_inset 
+
+ subject to Dirichlet boundary conditions: 
+\begin_inset Formula $\Psi(0,y)=0,\ \Psi(1,y)=\sin(1)\cos(y),\ \Psi(x,0)=\sin(x),\ \Psi(x,1)=\sin(x)\cos(1)$
+\end_inset 
+
+.
+ The exact solution is 
+\begin_inset Formula \[
+\Psi(x,y)=\sin(x)\cos(y)\]
+
+\end_inset 
+
+The representation of the equation in Fortran 77 is given in figure 
+\begin_inset LatexCommand \ref{Fortran-example}
+
+\end_inset 
+
+.
+ Suppose that the produced shared library for that equation is named
+\family typewriter 
+ expde.so
+\family default 
+ under the 
+\family typewriter 
+PdeExamples
+\family default 
+ directory of the distribution.
+ Under the 
+\family typewriter 
+bin
+\family default 
+ directory we issue the command:
+\layout LyX-Code
+
+./pde_cmd -p ../PdeExamples/expde.so -r 12345678
+\layout Standard
+
+The equation was solved exactly at the 
+\begin_inset Formula $58^{\mbox{th}}$
+\end_inset 
+
+ generation and the last line of the output of the 
+\family typewriter 
+pde_cmd
+\family default 
+ program is given in figure 
+\begin_inset LatexCommand \ref{pde_cmd-output}
+
+\end_inset 
+
+.
+\layout Standard
+
+
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Caption
+
+Output of the program pde_cmd 
+\begin_inset LatexCommand \label{pde_cmd-output}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\family typewriter 
+\size footnotesize 
+GENERATION: 58 FITNESS: -5.176312884e-32 SOLUTION: (-((-(cos(y)*sin(x)))))
+ 
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset Float figure
+placement H
+wide false
+collapsed false
+
+\layout Caption
+
+Codification of 
+\begin_inset Formula $\nabla^{2}\Psi(x,y)=-2\Psi(x,y)$
+\end_inset 
+
+ in Fortran 
+\begin_inset LatexCommand \label{Fortran-example}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function 
+\series default 
+getx0() 
+\layout Standard
+
+
+\family typewriter 
+getx0=0.0 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function 
+\series default 
+getx1() 
+\layout Standard
+
+
+\family typewriter 
+getx1=1.0 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function 
+\series default 
+gety0()
+\layout Standard
+
+
+\family typewriter 
+gety0=0.0 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ gety1() 
+\layout Standard
+
+
+\family typewriter 
+gety1=1.0 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+integer function
+\series default 
+ getnpoints() 
+\layout Standard
+
+
+\family typewriter 
+getnpoints=25 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+integer function
+\series default 
+ getbpoints() 
+\layout Standard
+
+
+\family typewriter 
+getbpoints=50 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ f0(y) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision
+\series default 
+ y 
+\layout Standard
+
+
+\family typewriter 
+f0=0.0 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ f1(y) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision 
+\series default 
+y 
+\layout Standard
+
+
+\family typewriter 
+f1=
+\series bold 
+sin
+\series default 
+(1.D0)*
+\series bold 
+cos
+\series default 
+(y) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ g0(x) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision
+\series default 
+ x 
+\layout Standard
+
+
+\family typewriter 
+g0=
+\series bold 
+sin
+\series default 
+(x) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ g1(x) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision
+\series default 
+ x 
+\layout Standard
+
+
+\family typewriter 
+g1=
+\series bold 
+sin
+\series default 
+(x)*
+\series bold 
+cos
+\series default 
+(1.D0) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision function
+\series default 
+ pde(x,y,v,x1,y1,x2,y2) 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+double precision
+\series default 
+ x,y,v,x1,y1,x2,y2 
+\layout Standard
+
+
+\family typewriter 
+pde=x2+y2+2.D0*v 
+\layout Standard
+
+
+\family typewriter 
+\series bold 
+end 
+\end_inset 
+
+
+\layout Bibliography
+\bibitem {key-44}
+
+I.
+ G.
+ Tsoulos and I.
+ E.
+ Lagaris, 
+\begin_inset Quotes eld
+\end_inset 
+
+Solving Differential Equations with Grammatical Evolution
+\begin_inset Quotes erd
+\end_inset 
+
+, Technical Report 13-2004, Department of Computer Science, University of
+ Ioannina, Greece, 2004.
+\layout Bibliography
+\bibitem {key-38}
+
+J.
+ R.
+ Koza, Genetic Programming: On the programming of Computer by Means of Natural
+ Selection.
+ MIT Press: Cambridge, MA, 1992.
+\layout Bibliography
+\bibitem {key-39}
+
+M.
+ O'Neill and C.
+ Ryan, 
+\begin_inset Quotes eld
+\end_inset 
+
+Under the hood of grammatical evolution,
+\begin_inset Quotes erd
+\end_inset 
+
+ In Wolfgang Banzhaf, Jason Daida, Agoston E.
+ Eiben, Max H.
+ Garzon Vasant Honavar, Mark Jakiela, and Robert E.
+ Smith (eds.), Proceedings of the Genetic and Evolutionary Computation Conference
+, vol.
+ 2, Orlando, Florida, USA, 13-17 July 1999, Morgan Kaufmann, pp.
+ 1143-1148, 1999.
+\layout Bibliography
+\bibitem {key-40}
+
+M.
+ O'Neill and C.
+ Ryan, 
+\begin_inset Quotes eld
+\end_inset 
+
+Evolving Multi-Line Compilable C Programs,
+\begin_inset Quotes erd
+\end_inset 
+
+ In Riccardo Poli, Peter Nordin, William B.
+ Langdon, and Terence C.
+ Fogarty (eds.), Proceedings of EuroGP'99, volume 1598 of LNCS, Goteborg,
+ Sweden, 26-27 May 1999.
+ Springer-Verlag, pp.
+ 83-92, 1999.
+\layout Bibliography
+\bibitem {key-41}
+
+M.
+ O'Neill and C.
+ Ryan, Grammatical Evolution: Evolutionary Automatic Programming in a Arbitrary
+ Language, volume 4 of Genetic programming.
+ Kluwer Academic Publishers, 2003.
+ 
+\layout Bibliography
+\bibitem {key-42}
+
+Tmake: available from http://tmake.sourceforge.net
+\layout Bibliography
+\bibitem {key-43}
+
+J.
+ Nieminen and J.
+ Yliluoma, 
+\begin_inset Quotes eld
+\end_inset 
+
+Function Parser for C++, v2.7
+\begin_inset Quotes erd
+\end_inset 
+
+, available from http://www.students.tut.fi/
+\begin_inset Formula $\tilde{\ }$
+\end_inset 
+
+warp/FunctionParser/.
+\the_end

@@ -1,0 +1,1100 @@
+%% LyX 1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass{article}
+\usepackage[]{fontenc}
+\usepackage{float}
+\usepackage{setspace}
+\doublespacing
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Bold symbol macro for standard LaTeX users
+\newcommand{\boldsymbol}[1]{\mbox{\boldmath $#1$}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+ \newenvironment{lyxcode}
+   {\begin{list}{}{
+     \setlength{\rightmargin}{\leftmargin}
+     \setlength{\listparindent}{0pt}% needed for AMS classes
+     \raggedright
+     \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{0pt}
+     \normalfont\ttfamily}%
+    \item[]}
+   {\end{list}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{listings}
+\def\lstlistingname{À…”‘¡}
+        \def\lstlistlistingname{–—œ√—¡ÃÃ¡‘¡}
+        \lstset{language=C++,
+%               backgroundcolor=\color{lightgray},
+                extendedchars=true,
+                showstringspaces=false,
+                stringstyle=\ttfamily,
+             %   caption=[ÀﬂÛÙ· \thelstlisting],
+              %  title=ÀﬂÛÙ· \thelstlisting,
+                frame=lines,
+ emptylines=0
+                }
+
+\makeatother
+\begin{document}
+
+
+\title{DeSolver: solving differential equations with grammatical evolution}
+
+
+\author{Ioannis G. Tsoulos I.E. Lagaris%
+\footnote{Corresponding author: lagaris@cs.uoi.gr%
+}}
+
+
+\date{Department of Computer Science, University of Ioannina\\
+P.O. Box 1186, Ioannina 45110 - GREECE}
+
+\maketitle
+\begin{abstract}
+DeSolver is a tool for solving ordinary and partial differential equations
+based on grammatical evolution. It is written entirely in ANSI C++,
+but the user can develop his part either in C++ or in Fortran 77.
+The solutions produces are in closed analytical form. We describe
+the tool and we give some examples.
+\end{abstract}
+\textbf{PACS}: 02.30.Hq, 02.30.Jr, 02.60.Lj, 02.60.Pn
+
+
+\section*{PROGRAM SUMMARY}
+
+\begin{flushleft}\textit{Title of program}: DESOLVER\end{flushleft}
+
+\begin{flushleft}\textit{Catalogue identifier}:\end{flushleft}
+
+\begin{flushleft}\textit{Program available from}: CPC Program Library,
+Queen's University of Belfast, N. Ireland.\end{flushleft}
+
+\begin{flushleft}\textit{Computer for which the program is designed
+and others on which it has been tested}: DESOLVER is designed for
+UNIX machines. \end{flushleft}
+
+\begin{flushleft}\emph{Installation}: University of Ioannina, Greece.\end{flushleft}
+
+\begin{flushleft}\textit{Programming language used}: GNU-C++, GNU
+Fortran - 77.\end{flushleft}
+
+\begin{flushleft}\emph{Memory required to execute with typical data}:
+1Megabyte.\end{flushleft}
+
+\begin{flushleft}\textit{No. of bits in a word}: 32\end{flushleft}
+
+\begin{flushleft}\emph{No. of processors used}: 1\end{flushleft}
+
+\begin{flushleft}\emph{Has the code been vectorised or parallelized?}:
+No.\end{flushleft}
+
+\begin{flushleft}\emph{No. of bytes in distributed program,including
+test data etc}.: 160 Kbytes.\end{flushleft}
+
+\begin{flushleft}\emph{Distribution format}: gzipped tar file.\end{flushleft}
+
+\begin{flushleft}\emph{Keywords}: Ordinary differential equations,
+Partial Differential equations, genetic programming, grammatical evolution,
+optimization.\end{flushleft}
+
+\begin{flushleft}\emph{Nature of physical problem}: Analytical solution
+of ordinary differential equations, systems of them as well as partial
+differential equations.\end{flushleft}
+
+\begin{flushleft}\emph{Method of solution}: The system utilizes the
+method of grammatical evolution.\end{flushleft}
+
+\begin{flushleft}\emph{Typical running time}: Depending on the complexity
+of the differential equation to be solved.\end{flushleft}
+
+
+\section*{LONG WRITE UP}
+
+
+\section{Introduction}
+
+The aim of this tool is to recover closed form analytical solutions
+of ordinary differential equations (ODEs), systems of differential
+equations (SODEs) and partial differential equations (PDEs). The program
+is based on a method developed by our group and is described in detail
+in \cite{key-44}. It relies on grammatical evolution, which is an
+evolutionary approach that produces valid code in accord to a set
+of grammatical rules. Grammatical evolution is detailed in \cite{key-39,key-40,key-41}.
+The tool is designed for UNIX systems equipped with the gnu C++ and
+Fortran 77 (g77) compilers.
+
+The rest of this article is organized as follows: in section 2 we
+present the contents of the distribution file, in section 3 the set
+of prerequisites for the installation of the tool is presented, in
+section 4 we explain the installation procedure of the DeSolver, in
+section 5 we present the programming libraries developed for the DeSolver
+tool and the produced binary files, in section 6 we present the codification
+scheme for the differential equations and in section 7 we list some
+test runs from the application of the programming tool.
+
+
+\section{Distribution}
+
+The tool is distributed in a tar.gz file named \texttt{DeSolver.tar.gz},
+a format which is recognized by almost all operating systems. In a
+Unix system issuing the following commands:
+
+\begin{enumerate}
+\item gunzip \texttt{DeSolver.tar.gz}
+\item tar xfv \texttt{DeSolver.tar}
+\end{enumerate}
+will create the directory \texttt{Desolver} with the following subdirectories:
+
+\begin{enumerate}
+\item \texttt{\textbf{bin}}: Directory where the binaries will be installed.
+\item \texttt{\textbf{doc}}: Directory containing the user manual (this
+file) in different formats such as \TeX{}, Postscript and PDF.
+\item \texttt{\textbf{include}}: Directory where the include files and specifically
+the files with the definition of the main classes of the tool will
+be installed. 
+\item \texttt{\textbf{lib}}: This directory is initially empty. It will
+host the tool libraries following compilation.
+\item \texttt{\textbf{libGT}}: Directory containing the \texttt{libgt} library
+that arranges the grammatical evolution and the genetic operations.
+\item \texttt{\textbf{libOde}}: Directory containing the library \texttt{libode},
+used for the description of ODEs, SODEs and PDEs.
+\item \texttt{\textbf{libParser}}: Directory containing the \texttt{libparser}
+library, used for evaluating produced functions their derivatives.
+\item \texttt{\textbf{OdeExamples}}: Directory containing examples of ODEs
+in C++ and in Fortran, with the appropriate format as required by
+the \texttt{libode} library.
+\item \texttt{\textbf{PdeExamples}}: Directory containing examples of PDEs
+in C++ and in Fortran, with the appropriate format as required by
+the \texttt{libode} library.
+\item \texttt{\textbf{SodeExamples}}: Directory containing examples of SODEs
+in C++ and in Fortran, with the appropriate format as required by
+the \texttt{libode} library.
+\end{enumerate}
+In the main \texttt{DeSolver} directory there are the following files:
+
+\begin{enumerate}
+\item \texttt{\textbf{INSTALL}}: Text file describing the installation steps.
+\item \texttt{\textbf{compile.bash}}: Script, that compiles the DeSolver,
+on UNIX systems running the bash shell.
+\item \texttt{\textbf{variables.bash}}: Script to customize the .bashrc
+file.
+\item \texttt{\textbf{compile.csh}}:Script, that compiles the DeSolver,
+on UNIX systems running the csh shell.
+\item \texttt{\textbf{variables.csh}}: Script to customize the .cshrc file.
+\item \texttt{\textbf{Makefile}}: It is the basic Makefile for the system. 
+\item \texttt{\textbf{osname.pl}}: Small script in Perl , that prints the
+name of the host operating system.
+\end{enumerate}
+
+\section{Prerequisites}
+
+The following software packages are required in order to compile the
+tool:
+
+\begin{enumerate}
+\item \textbf{gnu-C++}: The tool is written entirely in gnu C++. The \texttt{DeSolver}
+tool can not be compiled with other C++ compilers.
+\item \textbf{gnu-Fortran (g77)} : This is required only if the user wishes
+to write his equations in Fortran.
+\item \textbf{Perl}: To install \texttt{DeSolver} under UNIX, different
+makefiles are required for different UNIX versions. This is facilitated
+via a provided, modified version of the tmake \cite{key-42} tool
+written in Perl. The user can compile the entire system without the
+use of Perl and tmake, but this procedure requires additional programming
+skills and effort.
+\item One of \textbf{}\texttt{bash} or \textbf{}\texttt{\textbf{csh}}: All
+UNIX systems have one or more programming shells. Among the most popular
+are the \texttt{bash} and the \texttt{csh} shell. We include installation
+scripts for both shells, but any user with a little experience in
+shell programming can port the installation scripts to other shells
+as well.
+\end{enumerate}
+
+\section{Installation}
+
+The steps for installing the \texttt{DeSolver} tool are the following:
+
+\begin{enumerate}
+\item Uncompress the distribution file as described in section 2.
+\item cd \texttt{DeSolver}.
+\item If in bash shell issue the commands\\
+\texttt{compile.bash}~\\
+\texttt{variables.bash}
+\item If in csh shell issue the commands\\
+\texttt{compile.csh}\\
+\texttt{variables.csh}
+\end{enumerate}
+The first command creates the appropriate Makefiles and builds the
+entire system, while the second one adds the necessary lines to the
+main configuration file of the corresponding shell. This file is the
+\texttt{.bashrc} in the main user directory for the \texttt{bash}
+shell and the file .\texttt{cshrc} in the main user directory for
+the \texttt{csh} shell. The system has been successfully installed
+on GNU Linux systems, Solaris, Freebsd, Openbsd and IRIX.
+
+
+\section{Detailed description}
+
+
+\subsection{The libgt library}
+
+The \texttt{libgt} library consists of four classes and it is general
+enough to adapt in every programming language given the BNF definition.
+The first one is the GSymbol class, which represents the terminal
+and non - terminal symbols of the BNF grammar. The second class is
+the GRule class, which represents the production rules of the BNF
+grammar. The third class is the GProgram class, which represents programs
+in the given BNF grammar. Finally, the GPopulation class represents
+a population of chromosomes. Each chromosome is an instance of the
+GProgram class, with a problem depended fitness function. The crossover
+is performed with one - point crossover and the selection of parents
+for the crossover procedure is performed with the method of tournament
+selection. 
+
+
+\subsection{The libparser library}
+
+The \texttt{libparser} is used for the evaluation of the produced
+expressions and their first and second derivatives. The library contains
+two classes: the GDoubleStack class and the FunctionParser class.
+The first class is a stack of double values. The Standard Template
+Library of GNU C++ is equipped with a template for stacks, however
+we chose to write our own class, in order to accelerate the operations
+of push and pop and to perform checks for the values prior to the
+push operation. The second class is the FunctionParser library \cite{key-43},
+with the addition of some methods for the evaluation of first and
+second derivatives of the emerging expressions. 
+
+
+\subsection{The libode library }
+
+The third library is the \texttt{libode} program library. This library
+contains three classes: the GOdeProgram, the GSodeProgram and the
+GPdeProgram. Every class inherits the GProgram class and implements
+the virtual fitness method of the GProgram class. The GOdeProgram
+class represents trial solutions for ODEs, the GSodeProgram represents
+trial solutions for SODEs and the GPdeProgram class represents trial
+solutions for PDEs. In every class the user can pass as parameters
+through the corresponding methods the elements of the differential
+equation to be solved or he can pass as a parameter to the constructor
+method the location of the differential equation in the file system.
+The differential equation must be in shared library format and the
+formulation of the equation for every case is presented in the following
+section.
+
+
+\subsection{Binary files}
+
+We have created six driver programs for solving differential equations.
+All the programs are located in the \texttt{bin} directory. The programs
+\texttt{ode\_simple} and \texttt{ode\_cmd} are appropriate for solving
+ODEs, the programs \texttt{sode\_simple} and \texttt{sode\_cmd} for
+solving SODEs and the programs \texttt{pde\_simple} and \texttt{pde\_cmd}
+for solving PDEs. The programs with the suffix \texttt{\textbf{simple}}
+do not have any special command - line parameter. They accept only
+an argument that specifies the location of the shared library hosting
+the differential equation. These programs have default values for
+the system parameters such as the size of the genetic population or
+the selection rate and hence the user must edit the programs in order
+to adjust them accordingly. On the other hand, the programs with the
+suffix \texttt{\textbf{cmd}} are customizable and the user may specify
+the following parameters in the command line:
+
+\begin{enumerate}
+\item -\textbf{h:} A help screen for the parameters is presented.
+\item -\textbf{p path,} where path is the shared library hosting the differential
+equation to be solved.
+\item -\textbf{c count}, where count indicates the desired number of chromosomes
+in the population. The default value is 1000.
+\item -\textbf{l len}, where len is the size of each chromosome in the population.
+The default size of the chromosomes is 50.
+\item -\textbf{r} \textbf{sd}, where sd is the seed for the random number
+generator . The default value is 1000. We use the function rand()
+from the standard library of C++.
+\item -\textbf{g} \textbf{generations}, where generations is the maximum
+number of generations allowed. The default value for this parameter
+is 2000.
+\item -\textbf{e} \textbf{eps}, where eps is the threshold for the termination
+of the genetic algorithm. If the best chromosome fitness falls below
+that threshold, then the system stops creating generations. The default
+value for this parameter is $10^{-7}$.
+\item -\textbf{s} \textbf{srate}, where srate is used as the selection rate
+of the population. The user can specify values in the range {[}0,1{]}.
+The default value for this parameter is 0.1.
+\item -\textbf{m} \textbf{mrate}, where mrate is used as the mutation rate
+for the population. The user can specify values in the range {[}0,1{]}.
+The default value for this parameter is 0.05.
+\end{enumerate}
+
+\section{User written subprograms}
+
+The user can program his differential equations either in c++ or in
+Fortran. In this section examples for each case (ODE, SODE and PDE)
+are presented.
+
+
+\subsection{Format for ODEs}
+
+In figures \ref{c++-ode} and \ref{fortran-ode} we present the formulation
+for ODEs in the languages c++ and Fortran correspondingly. The listed
+functions have the following meaning:
+
+\begin{enumerate}
+\item \texttt{getx0()}: Returns the lower boundary point, $x_{0}$.
+\item \texttt{getx1()}: Returns the upper boundary point, $x_{1}$.
+\item \texttt{getkind()}: Returns 1,2 or 3. Code 1 indicates that the ODE
+is of first order and the boundary condition is of the form: $y(x_{0})=y_{0}$.
+Code 2 indicates that the ODE is of second order with boundary conditions
+of the form: $y(x_{0})=y_{0},\  y'(x_{0})=y'_{0}$. Finally, code
+3 indicates that the ODE is of second order with boundary conditions
+of the form: $y(x_{0})=y_{0},\  y(x_{1})=y_{1}$.
+\item \texttt{getnpoints()}: Returns the number of training points.
+\item \texttt{getf0()}: Returns the boundary condition on the left, $y_{0}$.
+\item \texttt{getf1()}: Returns the boundary condition on the right, $y_{1}$.
+\item \texttt{getff0()}: Returns the left boundary condition for second
+order ODEs $y'_{0}$.
+\item \texttt{ode1ff(x,y,yy)}: If the ODE is of first order, then the purpose
+of the tool is to minimize the function $\mbox{ode1ff}(x,M(x),M'(x))$,
+for different values of $x$ in the range $[x_{0},x_{1}]$. The function
+$M(x)$ is a function that arise from the procedure of grammatical
+evolution. The parameter y represents $M(x)$ and the parameter yy
+represents $M'(x)$. 
+\item \texttt{ode2ff(x,y,yy,yyy)}: If the ODE is of second order, then the
+\texttt{DeSolver} tries to minimize the function $\mbox{ode2ff}(x,M(x),M'(x),M''(x))$,
+for different values of $x$ in the range $[x_{0},x_{1}].$ As for
+\texttt{ode1ff} the function $M(x)$ emerges from the process of grammatical
+evolution. The parameter y represents $M(x)$, the parameter yy represents
+$M'(x)$ and the parameter yyy represents $M''(x)$.
+\end{enumerate}
+%
+\begin{figure}[H]
+
+\caption{Ode format in C++ \label{c++-ode}}
+
+\texttt{\textbf{extern}} \texttt{\char`\"{}C\char`\"{}}
+
+\texttt{\{}
+
+\texttt{$\quad$}\texttt{\textbf{double}} \texttt{getx0()}
+
+\texttt{$\quad$\{}
+
+\texttt{$\quad$\}}~\\
+
+
+\texttt{$\quad$}\texttt{\textbf{double}} \texttt{getx1()}
+
+\texttt{$\quad$\{}
+
+\texttt{$\quad$\}}~\\
+
+
+\texttt{$\quad$}\texttt{\textbf{int}} \texttt{getkind()}
+
+\texttt{$\quad$\{}
+
+\texttt{$\quad$\}}~\\
+
+
+\texttt{$\quad$}\texttt{\textbf{int}} \texttt{getnpoints()}
+
+\texttt{$\quad$\{}
+
+\texttt{$\quad$\}}~\\
+
+
+\texttt{$\quad$}\texttt{\textbf{double}} \texttt{getf0()}
+
+\texttt{$\quad$\{}
+
+\texttt{$\quad$\}}~\\
+
+
+\texttt{$\quad$}\texttt{\textbf{double}} \texttt{getf1()}
+
+\texttt{$\quad$\{}
+
+\texttt{$\quad$\}}~\\
+
+
+\texttt{$\quad$}\texttt{\textbf{double}} \texttt{getff0()}
+
+\texttt{$\quad$\{}
+
+\texttt{$\quad$\}}~\\
+
+
+\texttt{$\quad$}\texttt{\textbf{double}} \texttt{ode1ff(}\texttt{\textbf{double}}
+\texttt{x,}\texttt{\textbf{double}} \texttt{y,}\texttt{\textbf{double}}
+\texttt{yy)}
+
+\texttt{$\quad$\{}
+
+\texttt{$\quad$\}}~\\
+
+
+\texttt{$\quad$}\texttt{\textbf{double}} \texttt{ode2ff(}\texttt{\textbf{double}}
+\texttt{x,}\texttt{\textbf{double}} \texttt{y,}\texttt{\textbf{double}}
+\texttt{yy,}\texttt{\textbf{double}} \texttt{yyy) }
+
+\texttt{$\quad$\{}
+
+\texttt{$\quad$\}}
+
+\texttt{\}}
+\end{figure}
+
+
+%
+\begin{figure}[H]
+
+\caption{Ode format in Fortran\label{fortran-ode}}
+
+\texttt{\textbf{double precision function}} \texttt{getx0()}
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{getx1()}
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{integer function}} \texttt{getkind()}
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{integer function}} \texttt{getnpoints()}
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{getf0()}
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{getf1()}
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{getff0()}
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{ode1ff(x,y,yy)}
+
+\texttt{\textbf{double precision}} \texttt{x,y,yy}
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{ode2ff(x,y,yy,yyy)}
+
+\texttt{\textbf{double precision}} \texttt{x,y,yy,yyy}
+
+\texttt{\textbf{end}}
+\end{figure}
+
+
+The following steps simplify the way to add a new ODE:
+
+\begin{enumerate}
+\item Code the ODE either in C++ format or in Fortran format and put the
+corresponding file under the directory \texttt{OdeExamples}.
+\item Add the name of the ODE in the text file \texttt{odelist} under the
+directory named \texttt{OdeExamples}.
+\item Execute the script \texttt{makeodes.sh} in the same directory or run
+the command \texttt{make} in the main directory of the distribution.
+\end{enumerate}
+The steps above will create a shared library for the equation to be
+solved under the directory \texttt{OdeExamples}. Usually, in UNIX
+systems the shared libraries have the extension .so to their names.
+
+
+\subsection{Format for SODEs}
+
+In figures \ref{sode-c++} and \ref{sode-fortran} we demonstrate
+the formulation of SODE's in c++ and in Fortran programming languages
+correspondingly. The functions used in those formulations have the
+following meanings:
+
+\begin{enumerate}
+\item \texttt{getx0()}: Returns the left boundary, $x_{0}$.
+\item \texttt{getx1()}: Returns the right boundary, $x_{1}$.
+\item \texttt{getnode()}: Returns the number of ODE's in the system (system
+size).
+\item \texttt{getnpoints()}: Returns the number of the training points for
+the system of trial solutions.
+\item \texttt{systemfun(node,x,y,yy)} : For the SODE case, the aim of the
+\texttt{DeSolver} is to minimize the function $\mbox{systemfun}(n,x,Y,Y')$
+for values of $x$ in the range $[x_{0},x_{1}]$, where $n$ is the
+total number of equations in the system, $Y$ is a vector with elements
+the $n$ functions that are produced by the grammatical evolution
+evaluated at $x$ and $Y'$ is a vector with elements the first derivative
+of these $n$ equations evaluated at $x$. The argument node represents
+the $n$, the double precision array y stands for the vector $Y$
+and similar the double precision array yy represents the vector $Y'$. 
+\item s\texttt{ystemf0(node,f0)}: The argument node stands for the number
+of differential equations in the system and the double precision array
+f0 with node elements represents the vector holding the boundary conditions
+for each equation in the system.
+\end{enumerate}
+%
+\begin{figure}[H]
+
+\caption{Format for SODEs in C++\label{sode-c++}}
+
+\texttt{\textbf{extern}} \texttt{\char`\"{}C\char`\"{} \{}
+
+\texttt{\textbf{double}} \texttt{getx0() }
+
+\texttt{\{ }
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{double}} \texttt{getx1() }
+
+\texttt{\{ }
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{int}} \texttt{getnode() }
+
+\texttt{\{ }
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{int}} \texttt{getnpoints() }
+
+\texttt{\{ }
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{double}} \texttt{systemfun(}\texttt{\textbf{int}}
+\texttt{node,} \texttt{\textbf{double}} \texttt{x,} \texttt{\textbf{double}}
+\texttt{{*}y,} \texttt{\textbf{double}} \texttt{{*}yy) }
+
+\texttt{\{}
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{void}} \texttt{systemf0(}\texttt{\textbf{int}} \texttt{node,}\texttt{\textbf{double}}
+\texttt{{*}f0) }
+
+\texttt{\{ }
+
+\texttt{\}}
+
+\texttt{\}} 
+\end{figure}
+
+
+%
+\begin{figure}[H]
+
+\caption{Format for SODEs in Fortran\label{sode-fortran}}
+
+\texttt{\textbf{double precision function}} \texttt{getx0() }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{getx1() }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{integer function}} \texttt{getnode() }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{integer function}} \texttt{getnpoints() }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{systemfun(node,x,y,yy) }
+
+\texttt{\textbf{integer}} \texttt{node }
+
+\texttt{\textbf{double precision}} \texttt{x }
+
+\texttt{\textbf{double precision}} \texttt{y(node) }
+
+\texttt{\textbf{double precision}} \texttt{yy(node) }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{integer function}} \texttt{systemf0(node,f0) }
+
+\texttt{\textbf{integer}} \texttt{node }
+
+\texttt{\textbf{double precision}} \texttt{f0(node) }
+
+\texttt{\textbf{end }}
+\end{figure}
+
+
+Like the case of ODEs a similar procedure must be followed in order
+to add a new SODE in the system. The steps for this procedure has
+as follows:
+
+\begin{enumerate}
+\item Code the SODE either in C++ format or in Fortran format and put the
+corresponding file under the directory \texttt{SOdeExamples}.
+\item Add the name of the SODE in the text file \texttt{sodelist} under
+the directory named \texttt{SOdeExamples}.
+\item Execute the script \texttt{makesodes.sh} in the same directory or
+run the command \texttt{make} in the main directory of the distribution.
+\end{enumerate}
+The steps above will create a shared library for the equation to be
+solved under the directory \texttt{SOdeExamples}. 
+
+
+\subsection{PDE format}
+
+The system is capable of solving elliptic PDEs in two dimensions in
+a box $[x_{0},x_{1}]\times[y_{0},y_{1}]$ with the Dirichlet boundary
+conditions $\Psi(x_{0},y)=f_{0}(y)$, $\Psi(x_{1},y)=f_{1}(y)$, $\Psi(x,y_{0})=g_{0}(x)$
+and $\Psi(x,y_{1})=g_{1}(x)$. In figures \ref{pde-c++} and \ref{Fortran-PDE}
+we can see the formulation of PDE's in c++ and Fortran programming
+languages. The presented functions have the following representation:
+
+\begin{enumerate}
+\item \texttt{getx0()}: Returns the left boundary $x_{0}$.
+\item \texttt{getx1()}: Returns the right boundary $x_{1}$.
+\item \texttt{gety0()}: Returns the left boundary $y_{0}$.
+\item \texttt{gety1()}: Returns the right boundary $y_{1}$.
+\item \texttt{getnpoints()}: Returns the amount of interior training points
+for the PDE. 
+\item \texttt{getbpoints()}: Returns the amount of training points across
+each boundary of the PDE.
+\item \texttt{f0(y)}: Returns the boundary condition $f_{0}(y)$ across
+$x=x_{0}$.
+\item \texttt{f1(y)}: Returns the boundary condition $f_{1}(y)$ across
+$x=x_{1}.$
+\item \texttt{g0(x)}: Returns the boundary condition $g_{0}(x)$ across
+$y=y_{0}$.
+\item \texttt{g1(x)}: The function returns the boundary condition $g_{1}(x)$
+across $y=y_{1}$.
+\item \texttt{pde(x,y,v,x1,y1,x2,y2)}: For the PDE case \texttt{DeSolver}
+minimizes the function $\mbox{pde}\left(x,y,M(x,y),\frac{\partial M(x,y)}{\partial x},\frac{\partial M(x,y)}{\partial y},\frac{\partial^{2}M(x,y)}{\partial x^{2}},\frac{\partial^{2}M(x,y)}{\partial y^{2}}\right)$,
+where $x\in[x_{0},x_{1}]$ and $y\in[y_{0},y_{1}].$ The function
+$M(x,y)$ arises from the grammatical evolution and corresponds to
+the v argument. The argument x1 corresponds to the first derivative
+of $M(x,y)$ with respect to $x$, y1 corresponds to the first derivative
+of $M(x,y)$ with respect to y, x2 corresponds to the second derivative
+of $M(x,y)$ with respect to x and the y2 corresponds to the second
+derivative of $M(x,y)$ with respect to y.
+\end{enumerate}
+%
+\begin{figure}[H]
+
+\caption{Format for PDEs in C++\label{pde-c++}}
+
+\texttt{\textbf{extern}} \texttt{\char`\"{}C\char`\"{} \{}
+
+\texttt{\textbf{double}} \texttt{getx0() }
+
+\texttt{\{ }
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{double}} \texttt{getx1() }
+
+\texttt{\{}
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{double}} \texttt{gety0() }
+
+\texttt{\{ }
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{double}} \texttt{gety1() }
+
+\texttt{\{}
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{int}} \texttt{getnpoints() }
+
+\texttt{\{ }
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{int}} \texttt{getbpoints() }
+
+\texttt{\{ }
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{double}} \texttt{f0(}\texttt{\textbf{double}} \texttt{y) }
+
+\texttt{\{}
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{double}} \texttt{f1(}\texttt{\textbf{double}} \texttt{y) }
+
+\texttt{\{ }
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{double}} \texttt{g0(}\texttt{\textbf{double}} \texttt{x) }
+
+\texttt{\{ }
+
+\texttt{\} }~\\
+
+
+\texttt{\textbf{double}} \texttt{g1(}\texttt{\textbf{double}} \texttt{x) }
+
+\texttt{\{}
+
+\texttt{\}}~\\
+
+
+\texttt{\textbf{double}} \texttt{pde(}\texttt{\textbf{double}} \texttt{x,}
+\texttt{\textbf{double}} \texttt{y,} \texttt{\textbf{double}} \texttt{v,}
+\texttt{\textbf{double}} \texttt{x1,} \texttt{\textbf{double}} \texttt{y1,}
+
+\texttt{\textbf{$\quad\quad\quad\quad$double}} \texttt{x2,} \texttt{\textbf{double}}
+\texttt{y2) }
+
+\texttt{\{ }
+
+\texttt{\}}
+
+\texttt{\}} 
+\end{figure}
+
+
+%
+\begin{figure}[H]
+
+\caption{Format for PDEs in Fortran\label{Fortran-PDE}}
+
+\texttt{\textbf{double precision function}} \texttt{getx0() }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{getx1() }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{gety0() }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{gety1() }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{integer function}} \texttt{getnpoints() }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{integer function}} \texttt{getbpoints() }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{f0(y) }
+
+\texttt{\textbf{double precision}} \texttt{y }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{f1(y) }
+
+\texttt{\textbf{double precision}} \texttt{y }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{g0(x) }
+
+\texttt{\textbf{double precision}} \texttt{x }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{g1(x) }
+
+\texttt{\textbf{double precision}} \texttt{x }
+
+\texttt{\textbf{end}}~\\
+
+
+\texttt{\textbf{double precision function}} \texttt{pde(x,y,v,x1,y1,x2,y2) }
+
+\texttt{\textbf{double precision}} \texttt{x,y,v,x1,y1,x2,y2 }
+
+\texttt{\textbf{end}} \texttt{}
+\end{figure}
+
+
+Similarly to the case of ODEs and SODEs, the following procedure must
+be followed to add a new PDE in the system:
+
+\begin{enumerate}
+\item Code the PDE either in C++ format or in Fortran format and put the
+corresponding file under the directory \texttt{PdeExamples}.
+\item Add the name of the PDE in the text file \texttt{pdelist} under the
+directory named \texttt{PdeExamples}.
+\item Execute the script \texttt{makepdes.sh} in the same directory or run
+the command \texttt{make} in the main directory of the distribution.
+\end{enumerate}
+The steps above will create a shared library for the equation to be
+solved under the directory \texttt{PdeExamples}. 
+
+
+\section{Test Runs}
+
+
+\subsection{Ode example }
+
+Suppose that we want to solve the ordinary differential equation \[
+y''y'=-\frac{4}{x^{3}}\]
+with $y(1)=0,\  y'(1)=2$ and $x\in[1,2]$. The exact solution is
+$y=\log(x^{2})$. In figure \ref{example-c++} we see the formulation
+for this ODE expressed in the C++ programming language.%
+\begin{figure}[H]
+
+\caption{Codification of $y''y'=-\frac{4}{x^{3}}$ in c++\label{example-c++}}
+
+\texttt{\# include <math.h> }
+
+\texttt{\textbf{extern}} \texttt{\char`\"{}C\char`\"{} \{}
+
+\texttt{\textbf{double}} \texttt{getx0() \{} \texttt{\textbf{return}}
+\texttt{1.0; \}}
+
+\texttt{\textbf{double}} \texttt{getx1() \{} \texttt{\textbf{return}}
+\texttt{2.0; \}}
+
+\texttt{\textbf{int}} \texttt{getkind() \{} \texttt{\textbf{return}}
+\texttt{2; \}}
+
+\texttt{\textbf{int}} \texttt{getnpoints() \{} \texttt{\textbf{return}}
+\texttt{10; \}}
+
+\texttt{\textbf{double}} \texttt{getf0() \{} \texttt{\textbf{return}}
+\texttt{0.0; \}}
+
+\texttt{\textbf{double}} \texttt{getff0() \{} \texttt{\textbf{return}}
+\texttt{2.0; \}}
+
+\texttt{\textbf{double}} \texttt{getf1() \{} \texttt{\textbf{return}}
+\texttt{0.0;\}}
+
+\texttt{\textbf{double}} \texttt{ode1ff(}\texttt{\textbf{double}}
+\texttt{x,} \texttt{\textbf{double}} \texttt{y,} \texttt{\textbf{double}}
+\texttt{yy) \{} \texttt{\textbf{return}} \texttt{0.0; \}}
+
+\texttt{\textbf{double}} \texttt{ode2ff(}\texttt{\textbf{double}}
+\texttt{x,} \texttt{\textbf{double}} \texttt{y,} \texttt{\textbf{double}}
+\texttt{yy,} \texttt{\textbf{double}} \texttt{yyy)}
+
+\texttt{\{ }
+
+\texttt{\textbf{return}} \texttt{yyy{*}yy+4.0/(x{*}x{*}x); }
+
+\texttt{\}}
+
+\texttt{\} }
+\end{figure}
+Suppose that the ODE is compiled in a file named \texttt{exode.so}
+under the directory \texttt{OdeExamples} of the distribution. Under
+the \texttt{bin} directory of the distribution we issue the command:
+
+\begin{lyxcode}
+./ode\_cmd~-p~../OdeExamples/exode.so~-r~1000
+\end{lyxcode}
+In figure \ref{ode_cmd-output} the last line of the output of the
+above command is presented. As we can see the ODE is solved exactly
+in five generations of the genetic algorithm.
+
+%
+\begin{figure}[H]
+
+\caption{Output of the program ode\_cmd \label{ode_cmd-output}}
+
+\texttt{GENERATION:    5         FITNESS: -5.040895611e-31       SOLUTION: log(x{*}x) }
+\end{figure}
+Note that solving ODEs of the form $y'=f(x)$ corresponds to performing
+the indefinite integration $\int f(x)dx$. So, this method may be
+used as an integration tool as well.
+
+
+\subsection{Pde example}
+
+Suppose that we want to find the solution of the partial differential
+equation \[
+\nabla^{2}\Psi(x,y)=-2\Psi(x,y)\]
+with $x\in[0,1],\  y\in[0,1]$ subject to Dirichlet boundary conditions:
+$\Psi(0,y)=0,\ \Psi(1,y)=\sin(1)\cos(y),\ \Psi(x,0)=\sin(x),\ \Psi(x,1)=\sin(x)\cos(1)$.
+The exact solution is \[
+\Psi(x,y)=\sin(x)\cos(y)\]
+The representation of the equation in Fortran 77 is given in figure
+\ref{Fortran-example}. Suppose that the produced shared library for
+that equation is named \texttt{expde.so} under the \texttt{PdeExamples}
+directory of the distribution. Under the \texttt{bin} directory we
+issue the command:
+
+\begin{lyxcode}
+./pde\_cmd~-p~../PdeExamples/expde.so~-r~12345678
+\end{lyxcode}
+The equation was solved exactly at the $58^{\mbox{th}}$ generation
+and the last line of the output of the \texttt{pde\_cmd} program is
+given in figure \ref{pde_cmd-output}.
+
+%
+\begin{figure}[H]
+
+\caption{Output of the program pde\_cmd \label{pde_cmd-output}}
+
+\texttt{\footnotesize GENERATION: 58 FITNESS: -5.176312884e-32 SOLUTION: (-((-(cos(y){*}sin(x))))) }
+\end{figure}
+
+
+%
+\begin{figure}[H]
+
+\caption{Codification of $\nabla^{2}\Psi(x,y)=-2\Psi(x,y)$ in Fortran \label{Fortran-example}}
+
+\texttt{\textbf{double precision function}} \texttt{getx0() }
+
+\texttt{getx0=0.0 }
+
+\texttt{\textbf{end}}
+
+\texttt{\textbf{double precision function}} \texttt{getx1() }
+
+\texttt{getx1=1.0 }
+
+\texttt{\textbf{end}}
+
+\texttt{\textbf{double precision function}} \texttt{gety0()}
+
+\texttt{gety0=0.0 }
+
+\texttt{\textbf{end}}
+
+\texttt{\textbf{double precision function}} \texttt{gety1() }
+
+\texttt{gety1=1.0 }
+
+\texttt{\textbf{end}}
+
+\texttt{\textbf{integer function}} \texttt{getnpoints() }
+
+\texttt{getnpoints=25 }
+
+\texttt{\textbf{end}}
+
+\texttt{\textbf{integer function}} \texttt{getbpoints() }
+
+\texttt{getbpoints=50 }
+
+\texttt{\textbf{end}}
+
+\texttt{\textbf{double precision function}} \texttt{f0(y) }
+
+\texttt{\textbf{double precision}} \texttt{y }
+
+\texttt{f0=0.0 }
+
+\texttt{\textbf{end}}
+
+\texttt{\textbf{double precision function}} \texttt{f1(y) }
+
+\texttt{\textbf{double precision}} \texttt{y }
+
+\texttt{f1=}\texttt{\textbf{sin}}\texttt{(1.D0){*}}\texttt{\textbf{cos}}\texttt{(y) }
+
+\texttt{\textbf{end}}
+
+\texttt{\textbf{double precision function}} \texttt{g0(x) }
+
+\texttt{\textbf{double precision}} \texttt{x }
+
+\texttt{g0=}\texttt{\textbf{sin}}\texttt{(x) }
+
+\texttt{\textbf{end}}
+
+\texttt{\textbf{double precision function}} \texttt{g1(x) }
+
+\texttt{\textbf{double precision}} \texttt{x }
+
+\texttt{g1=}\texttt{\textbf{sin}}\texttt{(x){*}}\texttt{\textbf{cos}}\texttt{(1.D0) }
+
+\texttt{\textbf{end}}
+
+\texttt{\textbf{double precision function}} \texttt{pde(x,y,v,x1,y1,x2,y2) }
+
+\texttt{\textbf{double precision}} \texttt{x,y,v,x1,y1,x2,y2 }
+
+\texttt{pde=x2+y2+2.D0{*}v }
+
+\texttt{\textbf{end }}
+\end{figure}
+
+
+\begin{thebibliography}{1}
+\bibitem{key-44}I. G. Tsoulos and I. E. Lagaris, {}``Solving Differential Equations
+with Grammatical Evolution'', Technical Report 13-2004, Department
+of Computer Science, University of Ioannina, Greece, 2004.
+\bibitem{key-38}J. R. Koza, Genetic Programming: On the programming of Computer by
+Means of Natural Selection. MIT Press: Cambridge, MA, 1992.
+\bibitem{key-39}M. O'Neill and C. Ryan, {}``Under the hood of grammatical evolution,''
+In Wolfgang Banzhaf, Jason Daida, Agoston E. Eiben, Max H. Garzon
+Vasant Honavar, Mark Jakiela, and Robert E. Smith (eds.), Proceedings
+of the Genetic and Evolutionary Computation Conference, vol. 2, Orlando,
+Florida, USA, 13-17 July 1999, Morgan Kaufmann, pp. 1143-1148, 1999.
+\bibitem{key-40}M. O'Neill and C. Ryan, {}``Evolving Multi-Line Compilable C Programs,''
+In Riccardo Poli, Peter Nordin, William B. Langdon, and Terence C.
+Fogarty (eds.), Proceedings of EuroGP'99, volume 1598 of LNCS, Goteborg,
+Sweden, 26-27 May 1999. Springer-Verlag, pp. 83-92, 1999.
+\bibitem{key-41}M. O'Neill and C. Ryan, Grammatical Evolution: Evolutionary Automatic
+Programming in a Arbitrary Language, volume 4 of Genetic programming.
+Kluwer Academic Publishers, 2003. 
+\bibitem{key-42}Tmake: available from http://tmake.sourceforge.net
+\bibitem{key-43}J. Nieminen and J. Yliluoma, {}``Function Parser for C++, v2.7'',
+available from http://www.students.tut.fi/$\tilde{\ }$warp/FunctionParser/.\end{thebibliography}
+
+
+\end{document}
