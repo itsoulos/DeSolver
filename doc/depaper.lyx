@@ -98,8 +98,207 @@ DeSolver is a tool for solving ordinary and partial differential equations
  based on grammatical evolution.
  It is written entirely in ANSI C++ with the help of the freely available
  framework of QT and the user can develop his differential equation in C++.
- The solutions produced are in closed analytical form.
+ The solutions produced are in closed analytical form in a C - style language.
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+The aim of this tool is to recover closed form analytical solutions of ordinary
+ differential equations (ODEs), systems of differential equations (SODEs)
+ and partial differential equations (PDEs).
+ The program is based on a method developed by our group and is described
+ in detail in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-44"
+literal "true"
+
+\end_inset
+
+.
+ It relies on grammatical evolution, which is an evolutionary approach that
+ produces valid code in accord to a set of grammatical rules.
+ Grammatical evolution is detailed in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-39,key-40,key-41"
+literal "true"
+
+\end_inset
+
+.
+ The tool is designed for UNIX systems equipped with the gnu C++ and Fortran
+ 77 (g77) compilers.
+\end_layout
+
+\begin_layout Standard
+The rest of this article is organized as follows: in section 2 we present
+ the contents of the distribution file, in section 3 the set of prerequisites
+ for the installation of the tool is presented, in section 4 we explain
+ the installation procedure of the DeSolver, in section 5 we present the
+ programming libraries developed for the DeSolver tool and the produced
+ binary files, in section 6 we present the codification scheme for the different
+ial equations and in section 7 we list some test runs from the application
+ of the programming tool.
+\end_layout
+
+\begin_layout Section
+Detailed description 
+\end_layout
+
+\begin_layout Section
+Experimental results 
+\end_layout
+
+\begin_layout Section
+Conclusions
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-44"
+literal "true"
+
+\end_inset
+
+I.
+ G.
+ Tsoulos and I.
+ E.
+ Lagaris, 
+\begin_inset Quotes eld
+\end_inset
+
+Solving Differential Equations with Grammatical Evolution
+\begin_inset Quotes erd
+\end_inset
+
+, Technical Report 13-2004, Department of Computer Science, University of
+ Ioannina, Greece, 2004.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-38"
+literal "true"
+
+\end_inset
+
+J.
+ R.
+ Koza, Genetic Programming: On the programming of Computer by Means of Natural
+ Selection.
+ MIT Press: Cambridge, MA, 1992.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-39"
+literal "true"
+
+\end_inset
+
+M.
+ O'Neill and C.
+ Ryan, 
+\begin_inset Quotes eld
+\end_inset
+
+Under the hood of grammatical evolution,
+\begin_inset Quotes erd
+\end_inset
+
+ In Wolfgang Banzhaf, Jason Daida, Agoston E.
+ Eiben, Max H.
+ Garzon Vasant Honavar, Mark Jakiela, and Robert E.
+ Smith (eds.), Proceedings of the Genetic and Evolutionary Computation Conference
+, vol.
+ 2, Orlando, Florida, USA, 13-17 July 1999, Morgan Kaufmann, pp.
+ 1143-1148, 1999.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-40"
+literal "true"
+
+\end_inset
+
+M.
+ O'Neill and C.
+ Ryan, 
+\begin_inset Quotes eld
+\end_inset
+
+Evolving Multi-Line Compilable C Programs,
+\begin_inset Quotes erd
+\end_inset
+
+ In Riccardo Poli, Peter Nordin, William B.
+ Langdon, and Terence C.
+ Fogarty (eds.), Proceedings of EuroGP'99, volume 1598 of LNCS, Goteborg,
+ Sweden, 26-27 May 1999.
+ Springer-Verlag, pp.
+ 83-92, 1999.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-41"
+literal "true"
+
+\end_inset
+
+M.
+ O'Neill and C.
+ Ryan, Grammatical Evolution: Evolutionary Automatic Programming in a Arbitrary
+ Language, volume 4 of Genetic programming.
+ Kluwer Academic Publishers, 2003.
  
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-42"
+literal "true"
+
+\end_inset
+
+Tmake: available from http://tmake.sourceforge.net
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-43"
+literal "true"
+
+\end_inset
+
+J.
+ Nieminen and J.
+ Yliluoma, 
+\begin_inset Quotes eld
+\end_inset
+
+Function Parser for C++, v2.7
+\begin_inset Quotes erd
+\end_inset
+
+, available from http://www.students.tut.fi/
+\begin_inset Formula $\tilde{\ }$
+\end_inset
+
+warp/FunctionParser/.
 \end_layout
 
 \end_body
