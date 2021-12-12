@@ -57,6 +57,7 @@ class GSymbol
 		 * */
 		GSymbol();
 		GSymbol(string s,int status);
+        void    set(string s,int status);
 		void	setName(string s);
 		string	getName() const;
 		void	setTerminalStatus(int status);

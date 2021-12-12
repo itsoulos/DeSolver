@@ -1,16 +1,19 @@
 # ifndef __GETOPTIONS__H
+# include <QString>
+# include <QStringList>
 
 extern void print_usage();
-extern char	dll_name[1024];
-extern  char ode_kind[100];
-extern int     genome_count;
-extern int     genome_size;
+extern QString	dll_name;
+extern QString ode_kind;
+extern int     chromosome_count;
+extern int     chromosome_size;
 extern int     genome_rand;
 extern int     maxgenerations;
 extern double  eps;
 extern double  mutation_rate;
 extern double  selection_rate;
-extern void	get_options(int argc,char **argv);
+
+void parseCmdLine(QStringList args);
 
 # define __GETOPTIONS__H
 # endif

@@ -81,6 +81,7 @@ string	GRule::printRule(vector<int> genome,int &pos,int &redo)
 		 *	we call the printRule() for that symbol and we append 
 		 *	the resulting string to the end of the returning variable.
 		 * */
+		
 		GSymbol *s=data[i];
 		if(s->getTerminalStatus())
 			str=str+s->getName();	

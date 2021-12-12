@@ -35,7 +35,7 @@ GOdeProgram::GOdeProgram(double X0,double X1,int N)
 	ff0	= 0;
 }
 
-GOdeProgram::GOdeProgram(const char *filename)
+GOdeProgram::GOdeProgram(QString filename)
 	:GProgram()
 {
     ptr = new QLibrary(filename);

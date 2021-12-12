@@ -83,7 +83,7 @@ class GSodeProgram :public GProgram
 		 *	~GSodeProgram():		  The destructor of the class.
 		 * */
 		GSodeProgram(double X0,double X1,int Node,int Npoints);
-		GSodeProgram(const char *filename);
+        GSodeProgram(QString filename);
 		double	getX0() const;
 		double	getX1() const;
 		int	getNode() const;

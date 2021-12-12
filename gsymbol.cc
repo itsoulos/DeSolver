@@ -17,6 +17,12 @@ GSymbol::GSymbol()
 }
 
 
+void    GSymbol::set(string s, int status1)
+{
+    name = s;
+    is_terminal = status1;
+}
+
 GSymbol::GSymbol(string s,int status)
 {
 	/*	Set the name to s and is_terminal to status.
@@ -85,6 +91,6 @@ void	GSymbol::cut(int N)
 	/*	Reduce the amount of rules to N. The last rule.size()-N will be cut off. 
 	 *	This method can not increase the amount of rules, for security reasons.
 	 * */
-	if(N<0 || N>=rule.size()) return;
+    if(N<0 || N>=(int)rule.size()) return;
 	rule.resize(N);
 }

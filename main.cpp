@@ -9,6 +9,7 @@
 # include <math.h>
 # include <get_options.h>
 # include <stdio.h>
+# include <QCoreApplication>
 
 using namespace std;
 GOdeProgram     *ode_program=NULL;
@@ -23,12 +24,9 @@ GPopulation     *sode_population=NULL;
 void init_ode()
 {
     ode_grammar=new OdeGrammar;
-    ode_grammar->makeTerminals();
-    ode_grammar->makeNonTerminals();
-    ode_grammar->makeRules();
     ode_program =new GOdeProgram(dll_name);
     ode_program->setStartSymbol(ode_grammar->getStartSymbol());
-    ode_population=new GPopulation(genome_count,genome_size,ode_program);
+    ode_population=new GPopulation(chromosome_count,chromosome_size,ode_program);
     ode_population->setSelectionRate(selection_rate);
     ode_population->setMutationRate(mutation_rate);
 }
@@ -37,7 +35,7 @@ void    run_ode()
 {
     int iters=0;
     vector<int> genome;
-    genome.resize(genome_size);
+    genome.resize(chromosome_size);
     string solution;
     int redo;
     double fitness;
@@ -64,12 +62,10 @@ void    done_ode()
 void    init_pde()
 {
     pde_grammar=new PdeGrammar;
-    pde_grammar->makeTerminals();
-    pde_grammar->makeNonTerminals();
-    pde_grammar->makeRules();
+
     pde_program =new GPdeProgram(dll_name);
     pde_program->setStartSymbol(pde_grammar->getStartSymbol());
-    pde_population=new GPopulation(genome_count,genome_size,pde_program);
+    pde_population=new GPopulation(chromosome_count,chromosome_size,pde_program);
     pde_population->setSelectionRate(selection_rate);
     pde_population->setMutationRate(mutation_rate);
 
@@ -79,7 +75,7 @@ void    run_pde()
 {
     int iters=0;
     vector<int> genome;
-    genome.resize(genome_size);
+    genome.resize(chromosome_size);
     string solution;
     int redo;
     double fitness;
@@ -106,12 +102,9 @@ void    done_pde()
 void    init_sode()
 {
     ode_grammar=new OdeGrammar;
-    ode_grammar->makeTerminals();
-    ode_grammar->makeNonTerminals();
-    ode_grammar->makeRules();
     sode_program =new GSodeProgram(dll_name);
     sode_program->setStartSymbol(ode_grammar->getStartSymbol());
-    sode_population=new GPopulation(genome_count,genome_size,sode_program);
+    sode_population=new GPopulation(chromosome_count,chromosome_size,sode_program);
     sode_population->setSelectionRate(selection_rate);
     sode_population->setMutationRate(mutation_rate);
 }
@@ -121,10 +114,10 @@ void    run_sode()
 
     int iters=0,i,j;
     vector<int> genome;
-    genome.resize(genome_size);
+    genome.resize(chromosome_size);
 
     vector<int> part;
-    part.resize(genome_size/sode_program->getNode());
+    part.resize(chromosome_size/sode_program->getNode());
     vector<string> solution;
     solution.resize(sode_program->getNode());
     int redo;
@@ -138,8 +131,8 @@ void    run_sode()
             for(i=0;i<sode_program->getNode();i++)
             {
                     redo=0;
-                    for(j=0;j<genome_size/sode_program->getNode();j++)
-                            part[j]=genome[i*(genome_size/sode_program->getNode())+j];
+                    for(j=0;j<chromosome_size/sode_program->getNode();j++)
+                            part[j]=genome[i*(chromosome_size/sode_program->getNode())+j];
                     solution[i]=sode_program->printProgram(part,redo);
             }
             printf("GENERATION: %4d\t FITNESS: %.10lg \n",iters,fabs(fitness));
@@ -160,23 +153,30 @@ void    done_sode()
 
 int main(int argc, char *argv[])
 {
-    get_options(argc,argv);
+    QCoreApplication app(argc,argv);
+     setlocale(LC_ALL,"C");
+    parseCmdLine(app.arguments());
     srand(genome_rand);
-    if(!strcmp(ode_kind,"ode"))
+    if(dll_name=="")
+    {
+        print_usage();
+        return 0;
+    }
+    if(ode_kind=="ode")
     {
         init_ode();
         run_ode();
         done_ode();
     }
     else
-    if(!strcmp(ode_kind,"pde"))
+    if(ode_kind=="pde")
     {
         init_pde();
         run_pde();
         done_pde();
     }
     else
-    if(!strcmp(ode_kind,"sode"))
+    if(ode_kind=="sode")
     {
         init_sode();
         run_sode();

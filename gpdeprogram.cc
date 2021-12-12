@@ -36,7 +36,7 @@ GPdeProgram::GPdeProgram(double X0,double X1,double Y0,double Y1,int n,int b)
 	ptr=NULL;
 }
 
-GPdeProgram::GPdeProgram(const char *filename)
+GPdeProgram::GPdeProgram(QString filename)
 {
 	/*	The second constructor. It tries to load the 
 	 *	parameters from the dll filename. If the dll
@@ -284,7 +284,7 @@ double GPdeProgram::fitness(vector<int> &genome)
                 }
         }
         double p=penalty1+penalty2+penalty3+penalty4;
-        value+=p/4.0;
+        value+=p;///4.0;
         if(std::isnan(value) || std::isinf(value)) return GINF;
 	return -value;
 }

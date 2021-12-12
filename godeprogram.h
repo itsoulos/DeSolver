@@ -93,7 +93,7 @@ class GOdeProgram: public GProgram
 		 *	~GOdeProgram():		The destructor of the class.
 		 * */
 		GOdeProgram(double X0,double X1,int N);
-		GOdeProgram(const char *filename);
+        GOdeProgram(QString filename);
 
 		void	setKind(int k);
 		void	setF0(double f);

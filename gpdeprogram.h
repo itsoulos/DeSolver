@@ -74,7 +74,7 @@ class GPdeProgram :public GProgram
 		 *	~GPdeProgram():			The destructor of the class.
 		 * */
 		GPdeProgram(double X0,double X1,double Y0,double Y1,int n,int b);
-		GPdeProgram(const char *filename);
+        GPdeProgram(QString filename);
 		double	getX0() const;
 		double  getX1() const;
 		double  getY0() const;

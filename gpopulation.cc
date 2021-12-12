@@ -43,6 +43,65 @@ GPopulation::GPopulation(int gcount,int gsize,GProgram *p)
 	}
 }
 
+void	GPopulation::localSearch(int pos)
+{
+	vector<int> g;
+	g.resize(genome_size);
+	
+
+	for(int i=0;i<genome_size;i++)
+	{
+		int ipos = rand() % genome_size;
+		int new_value;
+		for(int k=0;k<20;k++)
+		{
+		int old_value = genome[pos][ipos];
+		new_value = rand() % 256;
+		genome[pos][ipos]=new_value;
+		for(int j=0;j<genome_size;j++) g[j]=genome[pos][j];
+		double trial_fitness=fitness(g);
+		if(fabs(trial_fitness)<fabs(fitness_array[pos]))
+		{
+			fitness_array[pos]=trial_fitness;
+			printf("NEW BEST VALUE[%4d] = %20.10lg \n",pos,fitness_array[pos]);
+	//		return;
+		}
+		else	genome[pos][ipos]=old_value;
+		}
+	}
+
+
+    for(int iters=1;iters<=100;iters++)
+    {
+        int gpos=rand() % genome_count;
+        int cutpoint=rand() % genome_size;
+        for(int j=0;j<cutpoint;j++) g[j]=genome[pos][j];
+        for(int j=cutpoint;j<genome_size;j++) g[j]=genome[gpos][j];
+        double f=fitness(g);
+        if(fabs(f)<fabs(fitness_array[pos]))
+        {
+            printf("NEW MIN[%4d]=%10.4lg\n",pos,f);
+            for(int j=0;j<genome_size;j++) genome[pos][j]=g[j];
+            fitness_array[pos]=f;
+//			return;
+        }
+        else
+        {
+            for(int j=0;j<cutpoint;j++) g[j]=genome[gpos][j];
+            for(int j=cutpoint;j<genome_size;j++) g[j]=genome[pos][j];
+            double f=fitness(g);
+            if(fabs(f)<fabs(fitness_array[pos]))
+            {
+            printf("NEW MIN[%4d]=%10.4lg\n",pos,f);
+                for(int j=0;j<genome_size;j++) genome[pos][j]=g[j];
+                fitness_array[pos]=f;
+//			return;
+            }
+        }
+    }
+
+}
+
 double 	GPopulation::fitness(vector<int> &g)
 {
 	/*	Return the fitness for the genome g. 
@@ -186,7 +245,9 @@ void	GPopulation::calcFitnessArray()
 
 	/*	For every genome calculate its fitness value and store
 	 *	it to the corresponding position in the fitness array.
-	 * */
+     * */
+
+
 	for(int i=0;i<genome_count;i++)
 	{
 		for(int j=0;j<genome_size;j++) g[j]=genome[i][j];	
@@ -225,6 +286,15 @@ void	GPopulation::nextGeneration()
 	calcFitnessArray();
 	select();
 	crossover();
+
+   int localSearchGenerations=20,localSearchChromosomes=20;
+    if((generation+1)%localSearchGenerations==0)
+	{
+        for(int i=0;i<localSearchChromosomes;i++)
+	localSearch(rand() % genome_count);
+		localSearch(0);
+	select();
+    }
 	++generation;
 }
 

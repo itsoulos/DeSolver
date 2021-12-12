@@ -1,6 +1,7 @@
 # include <gsodeprogram.h>		
 # include <math.h>
 # include <isinf.h>
+# include <QDebug>
 
 typedef double(*DOUBLE_FUNCTION)();
 typedef int(*INTEGER_FUNCTION)();
@@ -29,7 +30,7 @@ GSodeProgram::GSodeProgram(double X0,double X1,int Node,int Npoints)
 	for(int i=0;i<node;i++) parser[i]=new FunctionParser();
 }
 
-GSodeProgram::GSodeProgram(const char *filename)
+GSodeProgram::GSodeProgram(QString filename)
 {
 	/*	The second constructor of the class. It tries to open
 	 *	the dll filename. If the dll can not be opened, then

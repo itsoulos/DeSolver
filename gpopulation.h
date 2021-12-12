@@ -62,6 +62,7 @@ class GPopulation
 		int		tournament_size, genome_count, genome_size, generation;
 		GProgram	*program;
 
+		void	localSearch(int pos);
 		double 	fitness(vector<int> &g);
 		void	select();
 		void	crossover();

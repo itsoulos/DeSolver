@@ -2,33 +2,99 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <string.h>
-
+# include <get_options.h>
+# include <QString>
+# include <QStringList>
+# include <QDebug>
 const char *short_options="hp:c:k:l:r:g:e:s:m:";
 
 void print_usage()
 {
-    printf("\t-h	 Display this usage information.\n"
-           "\t-k     Speciy equation kind (ode,pde,sode) Default ode.\n"
-            "\t-p	 Specify dll with the equation. Default ()\n"
-            "\t-c    Specify population count. Default 1000.\n"
-            "\t-l	 Specify each genome's length. Default 50.\n"
-            "\t-r	 Specify seed for random generator. Default 1.\n"
-            "\t-g	 Specify maximum number of generations. Default 2000.\n"
-            "\t-e	 Specify threshold for termination. Default 1e-7\n"
-            "\t-s	 Specify selection rate. Default 0.1\n"
-            "\t-m	 Specify mutation rate. Default 0.05\n");
+    printf("\t--help        Display this usage information.\n"
+           "\t--kind=DE_KIND     Speciy equation kind (ode,pde,sode) Default ode.\n"
+            "\t--problem=<file>	 Specify dll with the equation. Default ()\n"
+            "\t--count=<i>    Specify population count. Default 1000.\n"
+            "\t--length=<i>	 Specify each genome's length. Default 50.\n"
+            "\t--random=<i>	 Specify seed for random generator. Default 1.\n"
+            "\t--generations=<i>	 Specify maximum number of generations. Default 2000.\n"
+            "\t--epsilon=<f>	 Specify threshold for termination. Default 1e-7\n"
+            "\t--srate=<f>	 Specify selection rate. Default 0.1\n"
+            "\t--mrate=<f>	 Specify mutation rate. Default 0.05\n");
 }
 
-char    ode_kind[100];
-char	dll_name[1024];
-int     genome_count=1000;
-int     genome_size=50;
+QString	dll_name="";
+QString ode_kind="ode";
+int     chromosome_count=1000;
+int     chromosome_size=50;
 int     genome_rand=1;
 int     maxgenerations=2000;
 double  eps=1e-7;
-double  mutation_rate=0.05;
-double  selection_rate=0.1;
+double  mutation_rate=0.1;
+double  selection_rate=0.05;
 
+
+void parseCmdLine(QStringList args)
+{
+    for(int i=1;i<args.size();i++)
+    {
+        if(args[i]=="--help")
+        {
+            print_usage();
+            exit(EXIT_SUCCESS);
+        }
+        QStringList sp=args[i].split("=");
+        QString param=sp[0];
+        QString value=sp[1];
+        if(param=="--kind")
+        {
+            ode_kind=value;
+        }
+        else
+        if(param=="--problem")
+        {
+            if(!value.startsWith(".") && !value.startsWith("/")) value="./"+value;
+            dll_name=value;
+        }
+        else
+        if(param=="--count")
+        {
+            chromosome_count=value.toInt();
+        }
+        else
+        if(param=="--length")
+        {
+            chromosome_size=value.toInt();
+        }
+        else
+        if(param=="--random")
+        {
+            genome_rand=value.toInt();
+        }
+        else
+        if(param=="--generations")
+        {
+            maxgenerations=value.toInt();
+        }
+        else
+        if(param=="--epsilon")
+        {
+            eps=value.toDouble();
+        }
+        else
+        if(param=="--srate")
+        {
+            selection_rate=value.toDouble();
+        }
+        else
+        if(param=="--mrate")
+        {
+            mutation_rate=value.toDouble();
+        }
+
+    }
+}
+
+/*
 void	get_options(int argc,char **argv)
 {
 	if(argc==1)
@@ -109,3 +175,4 @@ void	get_options(int argc,char **argv)
 	mutation_rate=atof(mutation_string);
 }
 
+*/
