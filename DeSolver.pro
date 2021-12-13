@@ -5,6 +5,7 @@ QT+= core
 QT-= gui
 
 SOURCES += main.cpp \
+    gbasegrammar.cpp \
     gpopulation.cc \
     gprogram.cc \
     grule.cc \
@@ -20,6 +21,7 @@ SOURCES += main.cpp \
     get_options.cc
 
 HEADERS += \
+    gbasegrammar.h \
     gpopulation.h \
     gprogram.h \
     grule.h \

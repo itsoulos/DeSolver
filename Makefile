@@ -53,6 +53,7 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
+		gbasegrammar.cpp \
 		gpopulation.cc \
 		gprogram.cc \
 		grule.cc \
@@ -67,6 +68,7 @@ SOURCES       = main.cpp \
 		ode_grammar.cc \
 		get_options.cc 
 OBJECTS       = main.o \
+		gbasegrammar.o \
 		gpopulation.o \
 		gprogram.o \
 		grule.o \
@@ -156,7 +158,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		DeSolver.pro gpopulation.h \
+		DeSolver.pro gbasegrammar.h \
+		gpopulation.h \
 		gprogram.h \
 		grule.h \
 		gsymbol.h \
@@ -169,6 +172,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		pde_grammar.h \
 		ode_grammar.h \
 		get_options.h main.cpp \
+		gbasegrammar.cpp \
 		gpopulation.cc \
 		gprogram.cc \
 		grule.cc \
@@ -363,8 +367,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents gpopulation.h gprogram.h grule.h gsymbol.h isinf.h gdoublestack.h fparser.hh gsodeprogram.h gpdeprogram.h godeprogram.h pde_grammar.h ode_grammar.h get_options.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp gpopulation.cc gprogram.cc grule.cc gsymbol.cc isinf.cc gdoublestack.cc fparser.cc gsodeprogram.cc gpdeprogram.cc godeprogram.cc pde_grammar.cc ode_grammar.cc get_options.cc $(DISTDIR)/
+	$(COPY_FILE) --parents gbasegrammar.h gpopulation.h gprogram.h grule.h gsymbol.h isinf.h gdoublestack.h fparser.hh gsodeprogram.h gpdeprogram.h godeprogram.h pde_grammar.h ode_grammar.h get_options.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp gbasegrammar.cpp gpopulation.cc gprogram.cc grule.cc gsymbol.cc isinf.cc gdoublestack.cc fparser.cc gsodeprogram.cc gpdeprogram.cc godeprogram.cc pde_grammar.cc ode_grammar.cc get_options.cc $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -424,9 +428,15 @@ main.o: main.cpp get_options.h \
 		gsodeprogram.h \
 		gpdeprogram.h \
 		ode_grammar.h \
-		gbasegrammar.h \
-		pde_grammar.h
+		pde_grammar.h \
+		gbasegrammar.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+
+gbasegrammar.o: gbasegrammar.cpp gbasegrammar.h \
+		gprogram.h \
+		gsymbol.h \
+		grule.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gbasegrammar.o gbasegrammar.cpp
 
 gpopulation.o: gpopulation.cc gpopulation.h \
 		gprogram.h \
@@ -495,11 +505,10 @@ pde_grammar.o: pde_grammar.cc grule.h \
 ode_grammar.o: ode_grammar.cc grule.h \
 		gsymbol.h \
 		ode_grammar.h \
-		gprogram.h \
-		gbasegrammar.h
+		gprogram.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ode_grammar.o ode_grammar.cc
 
-get_options.o: get_options.cc get_options.h
+get_options.o: get_options.cc 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o get_options.o get_options.cc
 
 ####### Install
