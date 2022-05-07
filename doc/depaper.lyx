@@ -82,7 +82,7 @@ DeSolver: a software tool to solve differential equations using Grammatical
 
 \begin_layout Author
 Ioannis G.
- Tsoulos
+ Tsoulos, Alexandros Tzallas, Evangelos Karvounis
 \end_layout
 
 \begin_layout Date
@@ -106,21 +106,126 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-The aim of this tool is to recover closed form analytical solutions of ordinary
- differential equations (ODEs), systems of differential equations (SODEs)
- and partial differential equations (PDEs).
- The program is based on a method developed by our group and is described
- in detail in 
+A variety of problems in areas such as physics 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "key-44"
-literal "true"
+key "de_physics1,de_physics2"
+literal "false"
+
+\end_inset
+
+, chemistry 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_chem1,de_chem2,de_chem3"
+literal "false"
+
+\end_inset
+
+, economics 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_econ1,de_econ2"
+literal "false"
+
+\end_inset
+
+, biology 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_bio1,de_bio2"
+literal "false"
+
+\end_inset
+
+ etc can be modelled using ordinary differential equations (ODEs), systems
+ of differential equations (SODEs) and partial differential equations (PDEs).
+ Due to the importance of differential equations, several methods have been
+ appeared in the relevant literature such as Runge Kutta methods 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_rk1,de_rk2,de_rk3"
+literal "false"
+
+\end_inset
+
+, Predictor - Corrector methods 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_pc1,de_pc2"
+literal "false"
 
 \end_inset
 
 .
- It relies on grammatical evolution, which is an evolutionary approach that
+ Also, many methods based on machine learning models have appeared such
+ as methods that utilize neural networks 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_nn1,de_nn2,de_nn3"
+literal "false"
+
+\end_inset
+
+, methods that incorporate radial basis functions networks 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_rbf1,de_rbf2,de_rbf3"
+literal "false"
+
+\end_inset
+
+, methods based on differential evolution techniques 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_de1,de_de2"
+literal "false"
+
+\end_inset
+
+, genetic algorithms 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "nn_ge1,nn_ge2"
+literal "false"
+
+\end_inset
+
+ etc.
+ Also, in the recent years a variety of methods that take advantage of modern
+ GPU architectures have been appeared for the solution of differential equations
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_gpu1,de_gpu2,de_gpu3"
+literal "false"
+
+\end_inset
+
+.
+ Also, a method based on Grammatical Evolution 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ge_main"
+literal "false"
+
+\end_inset
+
+ has been introduced to solve differential equations in analytical form
+ by Tsoulos and Lagaris 
+\series bold
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de_tsoulos"
+literal "true"
+
+\end_inset
+
+...........It relies on grammatical evolution, which is an evolutionary approach that
  produces valid code in accord to a set of grammatical rules.
+
+\series default
  Grammatical evolution is detailed in 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -135,50 +240,3342 @@ literal "true"
 \end_layout
 
 \begin_layout Standard
-The rest of this article is organized as follows: in section 2 we present
- the contents of the distribution file, in section 3 the set of prerequisites
- for the installation of the tool is presented, in section 4 we explain
- the installation procedure of the DeSolver, in section 5 we present the
- programming libraries developed for the DeSolver tool and the produced
- binary files, in section 6 we present the codification scheme for the different
-ial equations and in section 7 we list some test runs from the application
- of the programming tool.
+The rest of this article is organized as follows: 
 \end_layout
 
 \begin_layout Section
 Detailed description 
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Detailed-description"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Main algorithm
 \end_layout
 
 \begin_layout Section
-Experimental results 
+Software details
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Software-details"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Installation
+\end_layout
+
+\begin_layout Standard
+The user can program his differential equations either in c++ or in Fortran.
+ In this section examples for each case (ODE, SODE and PDE) are presented.
+\end_layout
+
+\begin_layout Subsection
+Format for ODEs
+\end_layout
+
+\begin_layout Standard
+In figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "c++-ode"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fortran-ode"
+
+\end_inset
+
+ we present the formulation for ODEs in the languages c++ and Fortran correspond
+ingly.
+ The listed functions have the following meaning:
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getx0()
+\family default
+: Returns the lower boundary point, 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getx1()
+\family default
+: Returns the upper boundary point, 
+\begin_inset Formula $x_{1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getkind()
+\family default
+: Returns 1,2 or 3.
+ Code 1 indicates that the ODE is of first order and the boundary condition
+ is of the form: 
+\begin_inset Formula $y(x_{0})=y_{0}$
+\end_inset
+
+.
+ Code 2 indicates that the ODE is of second order with boundary conditions
+ of the form: 
+\begin_inset Formula $y(x_{0})=y_{0},\ y'(x_{0})=y'_{0}$
+\end_inset
+
+.
+ Finally, code 3 indicates that the ODE is of second order with boundary
+ conditions of the form: 
+\begin_inset Formula $y(x_{0})=y_{0},\ y(x_{1})=y_{1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getnpoints()
+\family default
+: Returns the number of training points.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getf0()
+\family default
+: Returns the boundary condition on the left, 
+\begin_inset Formula $y_{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getf1()
+\family default
+: Returns the boundary condition on the right, 
+\begin_inset Formula $y_{1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getff0()
+\family default
+: Returns the left boundary condition for second order ODEs 
+\begin_inset Formula $y'_{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+ode1ff(x,y,yy)
+\family default
+: If the ODE is of first order, then the purpose of the tool is to minimize
+ the function 
+\begin_inset Formula $\mbox{ode1ff}(x,M(x),M'(x))$
+\end_inset
+
+, for different values of 
+\begin_inset Formula $x$
+\end_inset
+
+ in the range 
+\begin_inset Formula $[x_{0},x_{1}]$
+\end_inset
+
+.
+ The function 
+\begin_inset Formula $M(x)$
+\end_inset
+
+ is a function that arise from the procedure of grammatical evolution.
+ The parameter y represents 
+\begin_inset Formula $M(x)$
+\end_inset
+
+ and the parameter yy represents 
+\begin_inset Formula $M'(x)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+ode2ff(x,y,yy,yyy)
+\family default
+: If the ODE is of second order, then the 
+\family typewriter
+DeSolver
+\family default
+ tries to minimize the function 
+\begin_inset Formula $\mbox{ode2ff}(x,M(x),M'(x),M''(x))$
+\end_inset
+
+, for different values of 
+\begin_inset Formula $x$
+\end_inset
+
+ in the range 
+\begin_inset Formula $[x_{0},x_{1}].$
+\end_inset
+
+ As for 
+\family typewriter
+ode1ff
+\family default
+ the function 
+\begin_inset Formula $M(x)$
+\end_inset
+
+ emerges from the process of grammatical evolution.
+ The parameter y represents 
+\begin_inset Formula $M(x)$
+\end_inset
+
+, the parameter yy represents 
+\begin_inset Formula $M'(x)$
+\end_inset
+
+ and the parameter yyy represents 
+\begin_inset Formula $M''(x)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\lang greek
+Ode format in C++ 
+\begin_inset CommandInset label
+LatexCommand label
+name "c++-ode"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+extern
+\family default
+\series default
+ 
+\family typewriter
+"C"
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+getx0()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+getx1()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+
+\series bold
+int
+\family default
+\series default
+ 
+\family typewriter
+getkind()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+
+\series bold
+int
+\family default
+\series default
+ 
+\family typewriter
+getnpoints()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+getf0()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+getf1()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+getff0()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+ode1ff(
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+x,
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+y,
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+yy)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+ode2ff(
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+x,
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+y,
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+yy,
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+yyy)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\begin_inset Formula $\quad$
+\end_inset
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\lang greek
+Ode format in Fortran
+\begin_inset CommandInset label
+LatexCommand label
+name "fortran-ode"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+getx0()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+getx1()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+integer function
+\family default
+\series default
+ 
+\family typewriter
+getkind()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+integer function
+\family default
+\series default
+ 
+\family typewriter
+getnpoints()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+getf0()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+getf1()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+getff0()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+ode1ff(x,y,yy)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision
+\family default
+\series default
+ 
+\family typewriter
+x,y,yy
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+ode2ff(x,y,yy,yyy)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision
+\family default
+\series default
+ 
+\family typewriter
+x,y,yy,yyy
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The following steps simplify the way to add a new ODE:
+\end_layout
+
+\begin_layout Enumerate
+Code the ODE either in C++ format or in Fortran format and put the corresponding
+ file under the directory 
+\family typewriter
+OdeExamples
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Add the name of the ODE in the text file 
+\family typewriter
+odelist
+\family default
+ under the directory named 
+\family typewriter
+OdeExamples
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Execute the script 
+\family typewriter
+makeodes.sh
+\family default
+ in the same directory or run the command 
+\family typewriter
+make
+\family default
+ in the main directory of the distribution.
+\end_layout
+
+\begin_layout Standard
+The steps above will create a shared library for the equation to be solved
+ under the directory 
+\family typewriter
+OdeExamples
+\family default
+.
+ Usually, in UNIX systems the shared libraries have the extension .so to
+ their names.
+\end_layout
+
+\begin_layout Subsection
+Format for SODEs
+\end_layout
+
+\begin_layout Standard
+In figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sode-c++"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sode-fortran"
+
+\end_inset
+
+ we demonstrate the formulation of SODE's in c++ and in Fortran programming
+ languages correspondingly.
+ The functions used in those formulations have the following meanings:
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getx0()
+\family default
+: Returns the left boundary, 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getx1()
+\family default
+: Returns the right boundary, 
+\begin_inset Formula $x_{1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getnode()
+\family default
+: Returns the number of ODE's in the system (system size).
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getnpoints()
+\family default
+: Returns the number of the training points for the system of trial solutions.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+systemfun(node,x,y,yy)
+\family default
+ : For the SODE case, the aim of the 
+\family typewriter
+DeSolver
+\family default
+ is to minimize the function 
+\begin_inset Formula $\mbox{systemfun}(n,x,Y,Y')$
+\end_inset
+
+ for values of 
+\begin_inset Formula $x$
+\end_inset
+
+ in the range 
+\begin_inset Formula $[x_{0},x_{1}]$
+\end_inset
+
+, where 
+\begin_inset Formula $n$
+\end_inset
+
+ is the total number of equations in the system, 
+\begin_inset Formula $Y$
+\end_inset
+
+ is a vector with elements the 
+\begin_inset Formula $n$
+\end_inset
+
+ functions that are produced by the grammatical evolution evaluated at 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $Y'$
+\end_inset
+
+ is a vector with elements the first derivative of these 
+\begin_inset Formula $n$
+\end_inset
+
+ equations evaluated at 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ The argument node represents the 
+\begin_inset Formula $n$
+\end_inset
+
+, the double precision array y stands for the vector 
+\begin_inset Formula $Y$
+\end_inset
+
+ and similar the double precision array yy represents the vector 
+\begin_inset Formula $Y'$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+s
+\family typewriter
+ystemf0(node,f0)
+\family default
+: The argument node stands for the number of differential equations in the
+ system and the double precision array f0 with node elements represents
+ the vector holding the boundary conditions for each equation in the system.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\lang greek
+Format for SODEs in C++
+\begin_inset CommandInset label
+LatexCommand label
+name "sode-c++"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+extern
+\family default
+\series default
+ 
+\family typewriter
+"C" {
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+getx0()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+getx1()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+int
+\family default
+\series default
+ 
+\family typewriter
+getnode()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+int
+\family default
+\series default
+ 
+\family typewriter
+getnpoints()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+systemfun(
+\series bold
+int
+\family default
+\series default
+ 
+\family typewriter
+node,
+\family default
+ 
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+x,
+\family default
+ 
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+*y,
+\family default
+ 
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+*yy)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+void
+\family default
+\series default
+ 
+\family typewriter
+systemf0(
+\series bold
+int
+\family default
+\series default
+ 
+\family typewriter
+node,
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+*f0)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\lang greek
+Format for SODEs in Fortran
+\begin_inset CommandInset label
+LatexCommand label
+name "sode-fortran"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+getx0()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+getx1()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+integer function
+\family default
+\series default
+ 
+\family typewriter
+getnode()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+integer function
+\family default
+\series default
+ 
+\family typewriter
+getnpoints()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+systemfun(node,x,y,yy)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+integer
+\family default
+\series default
+ 
+\family typewriter
+node
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision
+\family default
+\series default
+ 
+\family typewriter
+x
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision
+\family default
+\series default
+ 
+\family typewriter
+y(node)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision
+\family default
+\series default
+ 
+\family typewriter
+yy(node)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+integer function
+\family default
+\series default
+ 
+\family typewriter
+systemf0(node,f0)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+integer
+\family default
+\series default
+ 
+\family typewriter
+node
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision
+\family default
+\series default
+ 
+\family typewriter
+f0(node)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Like the case of ODEs a similar procedure must be followed in order to add
+ a new SODE in the system.
+ The steps for this procedure has as follows:
+\end_layout
+
+\begin_layout Enumerate
+Code the SODE either in C++ format or in Fortran format and put the correspondin
+g file under the directory 
+\family typewriter
+SOdeExamples
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Add the name of the SODE in the text file 
+\family typewriter
+sodelist
+\family default
+ under the directory named 
+\family typewriter
+SOdeExamples
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Execute the script 
+\family typewriter
+makesodes.sh
+\family default
+ in the same directory or run the command 
+\family typewriter
+make
+\family default
+ in the main directory of the distribution.
+\end_layout
+
+\begin_layout Standard
+The steps above will create a shared library for the equation to be solved
+ under the directory 
+\family typewriter
+SOdeExamples
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+PDE format
+\end_layout
+
+\begin_layout Standard
+The system is capable of solving elliptic PDEs in two dimensions in a box
+ 
+\begin_inset Formula $[x_{0},x_{1}]\times[y_{0},y_{1}]$
+\end_inset
+
+ with the Dirichlet boundary conditions 
+\begin_inset Formula $\Psi(x_{0},y)=f_{0}(y)$
+\end_inset
+
+, 
+\begin_inset Formula $\Psi(x_{1},y)=f_{1}(y)$
+\end_inset
+
+, 
+\begin_inset Formula $\Psi(x,y_{0})=g_{0}(x)$
+\end_inset
+
+ and 
+\begin_inset Formula $\Psi(x,y_{1})=g_{1}(x)$
+\end_inset
+
+.
+ In figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "pde-c++"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Fortran-PDE"
+
+\end_inset
+
+ we can see the formulation of PDE's in c++ and Fortran programming languages.
+ The presented functions have the following representation:
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getx0()
+\family default
+: Returns the left boundary 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getx1()
+\family default
+: Returns the right boundary 
+\begin_inset Formula $x_{1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+gety0()
+\family default
+: Returns the left boundary 
+\begin_inset Formula $y_{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+gety1()
+\family default
+: Returns the right boundary 
+\begin_inset Formula $y_{1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getnpoints()
+\family default
+: Returns the amount of interior training points for the PDE.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+getbpoints()
+\family default
+: Returns the amount of training points across each boundary of the PDE.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+f0(y)
+\family default
+: Returns the boundary condition 
+\begin_inset Formula $f_{0}(y)$
+\end_inset
+
+ across 
+\begin_inset Formula $x=x_{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+f1(y)
+\family default
+: Returns the boundary condition 
+\begin_inset Formula $f_{1}(y)$
+\end_inset
+
+ across 
+\begin_inset Formula $x=x_{1}.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+g0(x)
+\family default
+: Returns the boundary condition 
+\begin_inset Formula $g_{0}(x)$
+\end_inset
+
+ across 
+\begin_inset Formula $y=y_{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+g1(x)
+\family default
+: The function returns the boundary condition 
+\begin_inset Formula $g_{1}(x)$
+\end_inset
+
+ across 
+\begin_inset Formula $y=y_{1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\family typewriter
+pde(x,y,v,x1,y1,x2,y2)
+\family default
+: For the PDE case 
+\family typewriter
+DeSolver
+\family default
+ minimizes the function 
+\begin_inset Formula $\mbox{pde}\left(x,y,M(x,y),\frac{\partial M(x,y)}{\partial x},\frac{\partial M(x,y)}{\partial y},\frac{\partial^{2}M(x,y)}{\partial x^{2}},\frac{\partial^{2}M(x,y)}{\partial y^{2}}\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $x\in[x_{0},x_{1}]$
+\end_inset
+
+ and 
+\begin_inset Formula $y\in[y_{0},y_{1}].$
+\end_inset
+
+ The function 
+\begin_inset Formula $M(x,y)$
+\end_inset
+
+ arises from the grammatical evolution and corresponds to the v argument.
+ The argument x1 corresponds to the first derivative of 
+\begin_inset Formula $M(x,y)$
+\end_inset
+
+ with respect to 
+\begin_inset Formula $x$
+\end_inset
+
+, y1 corresponds to the first derivative of 
+\begin_inset Formula $M(x,y)$
+\end_inset
+
+ with respect to y, x2 corresponds to the second derivative of 
+\begin_inset Formula $M(x,y)$
+\end_inset
+
+ with respect to x and the y2 corresponds to the second derivative of 
+\begin_inset Formula $M(x,y)$
+\end_inset
+
+ with respect to y.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\lang greek
+Format for PDEs in C++
+\begin_inset CommandInset label
+LatexCommand label
+name "pde-c++"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+extern
+\family default
+\series default
+ 
+\family typewriter
+"C" {
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+getx0()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+getx1()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+gety0()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+gety1()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+int
+\family default
+\series default
+ 
+\family typewriter
+getnpoints()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+int
+\family default
+\series default
+ 
+\family typewriter
+getbpoints()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+f0(
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+y)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+f1(
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+y)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+g0(
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+x)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+} 
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+g1(
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+x)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+pde(
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+x,
+\family default
+ 
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+y,
+\family default
+ 
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+v,
+\family default
+ 
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+x1,
+\family default
+ 
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+y1,
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+\begin_inset Formula $\quad\quad\quad\quad$
+\end_inset
+
+double
+\family default
+\series default
+ 
+\family typewriter
+x2,
+\family default
+ 
+\family typewriter
+\series bold
+double
+\family default
+\series default
+ 
+\family typewriter
+y2)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\lang greek
+Format for PDEs in Fortran
+\begin_inset CommandInset label
+LatexCommand label
+name "Fortran-PDE"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+getx0()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+getx1()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+gety0()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+gety1()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+integer function
+\family default
+\series default
+ 
+\family typewriter
+getnpoints()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+integer function
+\family default
+\series default
+ 
+\family typewriter
+getbpoints()
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+f0(y)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision
+\family default
+\series default
+ 
+\family typewriter
+y
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+f1(y)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision
+\family default
+\series default
+ 
+\family typewriter
+y
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+g0(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision
+\family default
+\series default
+ 
+\family typewriter
+x
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+g1(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision
+\family default
+\series default
+ 
+\family typewriter
+x
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision function
+\family default
+\series default
+ 
+\family typewriter
+pde(x,y,v,x1,y1,x2,y2)
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+double precision
+\family default
+\series default
+ 
+\family typewriter
+x,y,v,x1,y1,x2,y2
+\end_layout
+
+\begin_layout Plain Layout
+
+\family typewriter
+\series bold
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Similarly to the case of ODEs and SODEs, the following procedure must be
+ followed to add a new PDE in the system:
+\end_layout
+
+\begin_layout Enumerate
+Code the PDE either in C++ format or in Fortran format and put the corresponding
+ file under the directory 
+\family typewriter
+PdeExamples
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Add the name of the PDE in the text file 
+\family typewriter
+pdelist
+\family default
+ under the directory named 
+\family typewriter
+PdeExamples
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Execute the script 
+\family typewriter
+makepdes.sh
+\family default
+ in the same directory or run the command 
+\family typewriter
+make
+\family default
+ in the main directory of the distribution.
+\end_layout
+
+\begin_layout Standard
+The steps above will create a shared library for the equation to be solved
+ under the directory 
+\family typewriter
+PdeExamples
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Section
+Experiments 
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Experimental-results"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
 Conclusions
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Conclusions"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
-key "key-44"
-literal "true"
+key "de_physics1"
+literal "false"
+
+\end_inset
+
+M.
+ Raissi, G.E.
+ Karniadakis, Hidden physics models: Machine learning of nonlinear partial
+ differential equations, Journal of Computational Physics 
+\series bold
+357
+\series default
+, pp.
+ 125-141, 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_physics2"
+literal "false"
+
+\end_inset
+
+T.
+ Lelièvre, G.
+ Stoltz, Partial differential equations and stochastic methods in molecular
+ dynamics.
+ Acta Numerica 
+\series bold
+25
+\series default
+, pp.
+ 681-880, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_chem1"
+literal "false"
+
+\end_inset
+
+G.
+ Scholz, F.
+ Scholz, First-order differential equations in chemistry, ChemTexts 
+\series bold
+1
+\series default
+, 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_chem2"
+literal "false"
+
+\end_inset
+
+J.L.
+ Padgett, Y.
+ Geldiyev, S.
+ Gautam, W.
+ Peng, Y.
+ Mechref, A.
+ Ibraguimov, Object classification in analytical chemistry via data-driven
+ discovery of partial differential equations.
+ Comp and Math Methods, 2021.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_chem3"
+literal "false"
+
+\end_inset
+
+O.
+ Owoyele, P.
+ Pal, ChemNODE: A neural ordinary differential equations framework for efficient
+ chemical kinetic solvers, Energy and AI 
+\series bold
+7
+\series default
+, 2022.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_econ1"
+literal "false"
+
+\end_inset
+
+Z.
+ Wang, X.
+ Huang, H.
+ Shen, Control of an uncertain fractional order economic system via adaptive
+ sliding mode, Neurocomputing 
+\series bold
+83
+\series default
+, pp.
+ 83-88, 2012.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_econ2"
+literal "false"
+
+\end_inset
+
+Y.
+ Achdou, F.J.
+ Buera, J.M.
+ Lasry, P.L.
+ Lions, B.
+ Moll, Partial differential equation models in macroeconomicsPhil.
+ Trans.
+ R.
+ Soc.
+ A.
+ 
+\series bold
+372
+\series default
+, 2012.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_bio1"
+literal "false"
+
+\end_inset
+
+K.
+ Hattaf, N.
+ Yousfi, Global stability for reaction–diffusion equations in biology, Computers
+ & Mathematics with Applications 
+\series bold
+66
+\series default
+, pp.
+ 1488-1497, 2013.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_bio2"
+literal "false"
+
+\end_inset
+
+P.
+ Getto, M.
+ Waurick, A differential equation with state-dependent delay from cell populatio
+n biology, Journal of Differential Equations 
+\series bold
+260
+\series default
+, pp.
+ 6176-6200, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_rk1"
+literal "false"
+
+\end_inset
+
+W.
+ Tang, Y.
+ Sun,Construction of Runge–Kutta type methods for solving ordinary differential
+ equations, Applied Mathematics and Computation 
+\series bold
+234
+\series default
+, pp.
+ 179-191, 2014
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_rk2"
+literal "false"
+
+\end_inset
+
+C.A.
+ Kennedy, M.H.
+ Carpenter, Higher-order additive Runge–Kutta schemes for ordinary differential
+ equations, Applied Numerical Mathematics 
+\series bold
+136
+\series default
+, pp.
+ 183-205, 2019.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_rk3"
+literal "false"
+
+\end_inset
+
+.X.
+ Yang, Y.
+ Shen, Runge-Kutta Method for Solving Uncertain Differential Equations,
+ J.
+ Uncertain.
+ Anal.
+ Appl.
+ 
+\series bold
+3
+\series default
+, 17, 2015.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_pc1"
+literal "false"
+
+\end_inset
+
+H.
+ Kim, R.
+ Sakthivel, Numerical solution of hybrid fuzzy differential equations using
+ improved predictor–corrector method, Communications in Nonlinear Science
+ and Numerical Simulation 
+\series bold
+17
+\series default
+, pp.
+ 3788-3794, 2012.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_pc2"
+literal "false"
+
+\end_inset
+
+V.
+ Daftardar-Gejji, Y.
+ Sukale, S.
+ Bhalekar, A new predictor–corrector method for fractional differential
+ equations, Applied Mathematics and Computation 
+\series bold
+244
+\series default
+, pp.
+ 158-182, 2014.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_nn1"
+literal "false"
 
 \end_inset
 
 I.
- G.
- Tsoulos and I.
  E.
- Lagaris, 
-\begin_inset Quotes eld
+ Lagaris, A.
+ Likas, D.
+ I.
+ Fotiadis, Artificial neural networks for solving ordinary and partial different
+ial equations, IEEE Transactions on Neural Networks 
+\series bold
+9
+\series default
+, pp.
+ 987-1000, 1998.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_nn2"
+literal "false"
+
 \end_inset
 
-Solving Differential Equations with Grammatical Evolution
-\begin_inset Quotes erd
+S.
+ Mall, S.
+ Chakraverty, Application of Legendre Neural Network for solving ordinary
+ differential equations, Applied Soft Computing 
+\series bold
+43
+\series default
+, pp.
+ 347-356, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_nn3"
+literal "false"
+
 \end_inset
 
-, Technical Report 13-2004, Department of Computer Science, University of
- Ioannina, Greece, 2004.
+M.Pakdaman, A.
+ Ahmadian, S.
+ Effati, S.
+ Salahshour, D.
+ Baleanue, Solving differential equations of fractional order using an optimizat
+ion technique based on training artificial neural network, Applied Mathematics
+ and Computation 
+\series bold
+293
+\series default
+, pp.
+ 81-95, 2017.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_rbf1"
+literal "false"
+
+\end_inset
+
+C.
+ Franke, R.
+ Schaback, Solving partial differential equations by collocation using radial
+ basis functions, Applied Mathematics and Computation 
+\series bold
+93
+\series default
+, pp.
+ 73-82, 1998.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_rbf2"
+literal "false"
+
+\end_inset
+
+G.E.
+ Fasshauer, Solving differential equations with radial basis functions:
+ multilevel methods and smoothing, Advances in Computational Mathematics
+ 
+\series bold
+11
+\series default
+, pp.
+ 139–159, 1999.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_rbf3"
+literal "false"
+
+\end_inset
+
+M.
+ Tatari, M.
+ Dehghan, A method for solving partial differential equations via radial
+ basis functions: Application to the heat equation, Engineering Analysis
+ with Boundary Elements 
+\series bold
+34
+\series default
+, pp.
+ 206-212, 2010.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_de1"
+literal "false"
+
+\end_inset
+
+W.D.
+ Chang, Parameter identification of Chen and Lü systems: A differential
+ evolution approach, Chaos, Solitons & Fractals 
+\series bold
+32
+\series default
+, pp.
+ 1469-1476, 2007.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_de2"
+literal "false"
+
+\end_inset
+
+A.
+ Biswas, S.
+ Das, A.
+ Abraham, S.
+ Dasgupta, Design of fractional-order PIλDμ controllers with an improved
+ differential evolution, Engineering Applications of Artificial Intelligence
+ 
+\series bold
+22
+\series default
+, pp.
+ 343-350, 2009.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_ge1"
+literal "false"
+
+\end_inset
+
+O.A.
+ Arqub, Z.A.
+ Hammour, Numerical solution of systems of second-order boundary value problems
+ using continuous genetic algorithm, Information Sciences 279, pp.
+ 396-415, 2014.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "nn_ge2"
+literal "false"
+
+\end_inset
+
+D.
+ Gutierrez-Navarro, S.
+ Lopez-Aguayo, Solving ordinary differential equations using genetic algorithms
+ and the Taylor series matrix method, Journal of Physics Communications
+ 
+\series bold
+2
+\series default
+, 2018.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_gpu1"
+literal "false"
+
+\end_inset
+
+M.
+ Januszewski, M.Kostur, Accelerating numerical solution of stochastic differentia
+l equations with CUDA, Computer Physics Communications 
+\series bold
+181
+\series default
+, pp.
+ 183-188, 2010.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_gpu2"
+literal "false"
+
+\end_inset
+
+L.
+ Murray, GPU Acceleration of Runge-Kutta Integrators, IEEE Transactions
+ on Parallel and Distributed Systems 
+\series bold
+23
+\series default
+, pp.
+ 94-101, 2012.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_gpu3"
+literal "false"
+
+\end_inset
+
+C.
+ Riesinger, T.
+ Neckel, F.
+ Rupp, Solving Random Ordinary Differential Equations on GPU Clusters using
+ Multiple Levels of Parallelism, SIAM Journal on Scientific Computing 
+\series bold
+38
+\series default
+, pp.
+ C372-C402, 2016.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "ge_main"
+literal "false"
+
+\end_inset
+
+M.
+ O'Neill, C.
+ Ryan, Grammatical evolution, IEEE Transactions on Evolutionary Computation
+ 
+\series bold
+5
+\series default
+, pp.
+ 349-358, 2001.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "de_tsoulos"
+literal "true"
+
+\end_inset
+
+I.G.
+ Tsoulos, I.E.
+ Lagaris, Solving differential equations with genetic programming.
+ Genet Program Evolvable Mach 
+\series bold
+7
+\series default
+, pp.
+ 33–54, 2006.
 \end_layout
 
 \begin_layout Bibliography
