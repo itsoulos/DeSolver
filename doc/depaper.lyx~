@@ -213,8 +213,6 @@ literal "false"
 
  has been introduced to solve differential equations in analytical form
  by Tsoulos and Lagaris 
-\series bold
-
 \begin_inset CommandInset citation
 LatexCommand cite
 key "de_tsoulos"
@@ -222,19 +220,16 @@ literal "true"
 
 \end_inset
 
-...........It relies on grammatical evolution, which is an evolutionary approach that
- produces valid code in accord to a set of grammatical rules.
+, that creates solutions of differential equations in closed analytical
+ form.
+ 
+\end_layout
 
-\series default
- Grammatical evolution is detailed in 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "key-39,key-40,key-41"
-literal "true"
-
-\end_inset
-
-.
+\begin_layout Standard
+This work modifies the original work by adding a new stochastic termination
+ rule as well as a local search procedure which enchances the located solutions.
+ Also, the used software tools is illustrated in detail and some examples
+ of usage are presented.
  The tool is designed for UNIX systems equipped with the gnu C++ and Fortran
  77 (g77) compilers.
 \end_layout
@@ -245,6 +240,13 @@ The rest of this article is organized as follows:
 
 \begin_layout Section
 Detailed description 
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Detailed-description"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -253,6 +255,13 @@ Main algorithm
 
 \begin_layout Section
 Software details
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Software-details"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -3562,126 +3571,6 @@ I.G.
 \series default
 , pp.
  33–54, 2006.
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-38"
-literal "true"
-
-\end_inset
-
-J.
- R.
- Koza, Genetic Programming: On the programming of Computer by Means of Natural
- Selection.
- MIT Press: Cambridge, MA, 1992.
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-39"
-literal "true"
-
-\end_inset
-
-M.
- O'Neill and C.
- Ryan, 
-\begin_inset Quotes eld
-\end_inset
-
-Under the hood of grammatical evolution,
-\begin_inset Quotes erd
-\end_inset
-
- In Wolfgang Banzhaf, Jason Daida, Agoston E.
- Eiben, Max H.
- Garzon Vasant Honavar, Mark Jakiela, and Robert E.
- Smith (eds.), Proceedings of the Genetic and Evolutionary Computation Conference
-, vol.
- 2, Orlando, Florida, USA, 13-17 July 1999, Morgan Kaufmann, pp.
- 1143-1148, 1999.
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-40"
-literal "true"
-
-\end_inset
-
-M.
- O'Neill and C.
- Ryan, 
-\begin_inset Quotes eld
-\end_inset
-
-Evolving Multi-Line Compilable C Programs,
-\begin_inset Quotes erd
-\end_inset
-
- In Riccardo Poli, Peter Nordin, William B.
- Langdon, and Terence C.
- Fogarty (eds.), Proceedings of EuroGP'99, volume 1598 of LNCS, Goteborg,
- Sweden, 26-27 May 1999.
- Springer-Verlag, pp.
- 83-92, 1999.
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-41"
-literal "true"
-
-\end_inset
-
-M.
- O'Neill and C.
- Ryan, Grammatical Evolution: Evolutionary Automatic Programming in a Arbitrary
- Language, volume 4 of Genetic programming.
- Kluwer Academic Publishers, 2003.
- 
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-42"
-literal "true"
-
-\end_inset
-
-Tmake: available from http://tmake.sourceforge.net
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "key-43"
-literal "true"
-
-\end_inset
-
-J.
- Nieminen and J.
- Yliluoma, 
-\begin_inset Quotes eld
-\end_inset
-
-Function Parser for C++, v2.7
-\begin_inset Quotes erd
-\end_inset
-
-, available from http://www.students.tut.fi/
-\begin_inset Formula $\tilde{\ }$
-\end_inset
-
-warp/FunctionParser/.
 \end_layout
 
 \end_body
