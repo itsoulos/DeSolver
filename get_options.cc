@@ -19,6 +19,7 @@ void print_usage()
             "\t--generations=<i>	 Specify maximum number of generations. Default 2000.\n"
             "\t--epsilon=<f>	 Specify threshold for termination. Default 1e-7\n"
             "\t--srate=<f>	 Specify selection rate. Default 0.1\n"
+            "\t--threads=<i> Specify the number of OpenMP threads. Default 1.\n"
             "\t--mrate=<f>	 Specify mutation rate. Default 0.05\n");
 }
 
@@ -31,7 +32,7 @@ int     maxgenerations=2000;
 double  eps=1e-7;
 double  mutation_rate=0.1;
 double  selection_rate=0.05;
-
+int threads=1;
 
 void parseCmdLine(QStringList args)
 {
@@ -90,7 +91,11 @@ void parseCmdLine(QStringList args)
         {
             mutation_rate=value.toDouble();
         }
-
+        else
+        if(param=="--threads")
+        {
+            threads = value.toInt();
+        }
     }
 }
 

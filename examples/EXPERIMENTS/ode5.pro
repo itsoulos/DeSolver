@@ -1,0 +1,2 @@
+TEMPLATE =lib
+SOURCES =ode5.cc

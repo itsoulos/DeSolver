@@ -21,12 +21,25 @@ GPopulation     *pde_population=NULL;
 GSodeProgram    *sode_program   =NULL;
 GPopulation     *sode_population=NULL;
 
+
+vector<GProgram*> ompODeProgram;
+
 void init_ode()
 {
     ode_grammar=new OdeGrammar;
     ode_program =new GOdeProgram(dll_name);
     ode_program->setStartSymbol(ode_grammar->getStartSymbol());
-    ode_population=new GPopulation(chromosome_count,chromosome_size,ode_program);
+
+    ompODeProgram.resize(threads);
+    for(int i=0;i<threads;i++)
+    {
+        ompODeProgram[i]=new GOdeProgram(dll_name);
+        ompODeProgram[i]->setStartSymbol(ode_grammar->getStartSymbol());
+    }
+    if(threads<=1)
+        ode_population=new GPopulation(chromosome_count,chromosome_size,ode_program);
+    else
+    ode_population=new GPopulation(chromosome_count,chromosome_size,ompODeProgram);
     ode_population->setSelectionRate(selection_rate);
     ode_population->setMutationRate(mutation_rate);
 }
@@ -54,6 +67,9 @@ void    run_ode()
 
 void    done_ode()
 {
+    for(int i=0;i<threads;i++)
+        delete ompODeProgram[i];
+
     delete ode_program;
     delete ode_population;
     delete ode_grammar;
@@ -62,13 +78,21 @@ void    done_ode()
 void    init_pde()
 {
     pde_grammar=new PdeGrammar;
-
     pde_program =new GPdeProgram(dll_name);
     pde_program->setStartSymbol(pde_grammar->getStartSymbol());
-    pde_population=new GPopulation(chromosome_count,chromosome_size,pde_program);
+    ompODeProgram.resize(threads);
+
+    for(int i=0;i<threads;i++)
+    {
+        ompODeProgram[i]=new GPdeProgram(dll_name);
+        ompODeProgram[i]->setStartSymbol(pde_grammar->getStartSymbol());
+    }
+    if(threads<=1)
+        pde_population=new GPopulation(chromosome_count,chromosome_size,pde_program);
+    else
+    pde_population=new GPopulation(chromosome_count,chromosome_size,ompODeProgram);
     pde_population->setSelectionRate(selection_rate);
     pde_population->setMutationRate(mutation_rate);
-
 }
 
 void    run_pde()
@@ -94,6 +118,8 @@ void    run_pde()
 
 void    done_pde()
 {
+    for(int i=0;i<threads;i++)
+        delete ompODeProgram[i];
     delete pde_population;
     delete pde_program;
     delete pde_grammar;
@@ -104,7 +130,17 @@ void    init_sode()
     ode_grammar=new OdeGrammar;
     sode_program =new GSodeProgram(dll_name);
     sode_program->setStartSymbol(ode_grammar->getStartSymbol());
-    sode_population=new GPopulation(chromosome_count,chromosome_size,sode_program);
+    ompODeProgram.resize(threads);
+
+    for(int i=0;i<threads;i++)
+    {
+        ompODeProgram[i]=new GSodeProgram(dll_name);
+        ompODeProgram[i]->setStartSymbol(ode_grammar->getStartSymbol());
+    }
+    if(threads<=1)
+        sode_population=new GPopulation(chromosome_count,chromosome_size,sode_program);
+    else
+    sode_population=new GPopulation(chromosome_count,chromosome_size,ompODeProgram);
     sode_population->setSelectionRate(selection_rate);
     sode_population->setMutationRate(mutation_rate);
 }
@@ -146,6 +182,8 @@ void    run_sode()
 
 void    done_sode()
 {
+    for(int i=0;i<threads;i++)
+        delete ompODeProgram[i];
     delete ode_grammar;
     delete sode_population;
     delete sode_program;

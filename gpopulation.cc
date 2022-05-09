@@ -2,9 +2,43 @@
 # include <math.h>
 # include <stdio.h>
 # include <iostream>
-
+# include <omp.h>
 # define MAX_RULE	256
 
+GPopulation::GPopulation(int gcount,int gsize,vector<GProgram*> p)
+{
+
+    /*	Default values for the parameters
+     *	of the population.
+     * */
+    selection_rate  = 0.1;
+    mutation_rate   = 0.1;
+    genome_count    = gcount;
+    genome_size     = gsize;
+    generation      = 0;
+    ompProgram         = p;
+    tournament_size =10;
+
+    /*	Memory allocation.
+     * */
+    genome=new int*[genome_count];
+    children=new int*[genome_count];
+
+    /*	Random initialization of the population.
+     * */
+    for(int i=0;i<genome_count;i++)
+    {
+        genome[i]=new int[genome_size];
+        children[i]=new int[genome_size];
+        for(int j=0;j<genome_size;j++)
+        {
+            genome[i][j]=rand()%MAX_RULE;
+        }
+    }
+    fitness_array=new double[genome_count];
+    calcFitnessArray();
+
+}
 GPopulation::GPopulation(int gcount,int gsize,GProgram *p)
 {
 	/*	Default values for the parameters
@@ -35,12 +69,8 @@ GPopulation::GPopulation(int gcount,int gsize,GProgram *p)
 		}
 	}
 	fitness_array=new double[genome_count];
-	bool all_false=true;
 	calcFitnessArray();
-	for(int i=0;i<genome_count;i++)
-	{
-		if(!isnan(fitness_array[i]) && !isinf(fitness_array[i]) && fabs(fitness_array[i]<1e+100)) all_false=false;
-	}
+
 }
 
 void	GPopulation::localSearch(int pos)
@@ -63,7 +93,6 @@ void	GPopulation::localSearch(int pos)
 		if(fabs(trial_fitness)<fabs(fitness_array[pos]))
 		{
 			fitness_array[pos]=trial_fitness;
-			printf("NEW BEST VALUE[%4d] = %20.10lg \n",pos,fitness_array[pos]);
 	//		return;
 		}
 		else	genome[pos][ipos]=old_value;
@@ -80,7 +109,6 @@ void	GPopulation::localSearch(int pos)
         double f=fitness(g);
         if(fabs(f)<fabs(fitness_array[pos]))
         {
-            printf("NEW MIN[%4d]=%10.4lg\n",pos,f);
             for(int j=0;j<genome_size;j++) genome[pos][j]=g[j];
             fitness_array[pos]=f;
 //			return;
@@ -92,7 +120,6 @@ void	GPopulation::localSearch(int pos)
             double f=fitness(g);
             if(fabs(f)<fabs(fitness_array[pos]))
             {
-            printf("NEW MIN[%4d]=%10.4lg\n",pos,f);
                 for(int j=0;j<genome_size;j++) genome[pos][j]=g[j];
                 fitness_array[pos]=f;
 //			return;
@@ -108,7 +135,14 @@ double 	GPopulation::fitness(vector<int> &g)
 	 *	The value is taken from the program pointed
 	 *	by program.
 	 * */
+    extern int threads;
+    if(threads<=1)
 	return program->fitness(g);
+    else
+    {
+        int tpos= omp_get_thread_num();
+        return ompProgram[tpos]->fitness(g);
+    }
 }
 
 void	GPopulation::select()
@@ -246,13 +280,26 @@ void	GPopulation::calcFitnessArray()
 	/*	For every genome calculate its fitness value and store
 	 *	it to the corresponding position in the fitness array.
      * */
-
-
+extern int threads;
+if(threads<=1)
+{
+    for(int i=0;i<genome_count;i++)
+    {
+        for(int j=0;j<genome_size;j++) g[j]=genome[i][j];
+        fitness_array[i]=fitness(g);
+    }
+}
+else
+{
+#pragma omp parallel for num_threads(threads)
 	for(int i=0;i<genome_count;i++)
 	{
+        vector<int> g;
+        g.resize(genome_size);
 		for(int j=0;j<genome_size;j++) g[j]=genome[i][j];	
 		fitness_array[i]=fitness(g);
 	}
+}
 }
 
 int	GPopulation::getGeneration() const

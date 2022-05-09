@@ -47,6 +47,11 @@ extern double  mutation_rate;
 extern double  selection_rate;
 
 /**
+ * @brief threads the number of OpenMP threads.
+ */
+extern int threads;
+
+/**
  * @brief parseCmdLine This method parses the command line.
  * @param args The arguments of the command line.
  */

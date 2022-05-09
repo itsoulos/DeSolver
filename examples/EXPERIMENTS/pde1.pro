@@ -1,0 +1,2 @@
+TEMPLATE =lib
+SOURCES =pde1.cc

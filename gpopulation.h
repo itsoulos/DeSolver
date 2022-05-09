@@ -1,5 +1,7 @@
 # ifndef __GPOPULATION__H
 # include <gprogram.h>
+# include <vector>
+using namespace std;
 
 /**
  * @brief The GPopulation class  represents the population of
@@ -66,6 +68,8 @@ class GPopulation
          *		 	 to the population.
          */
 		GProgram	*program;
+
+        vector<GProgram*> ompProgram;
         /**
          * @brief localSearch performs a local search for the chromosome at pos position.
          * @param pos
@@ -113,6 +117,8 @@ class GPopulation
          * @param p
          */
 		GPopulation(int gcount,int gsize,GProgram *p);
+
+        GPopulation(int gcount,int gsize,vector<GProgram*> p);
         /**
          * @brief getGeneration
          * @return the  consecutive number of
