@@ -2,40 +2,54 @@
 # include <math.h>
 # include <isinf.h>
 
-/*	CLASS DESCRIPTION
- *	=================
- *	This class implements a stack with double values
- *	on it. It will be used for the differentiation 
+/**
+ * @brief The GDoubleStack class This class implements a stack with double values
+ *	on it. It will be used for the differentiation
  *	process in FunctionParser class.
- * */
-
+ */
 class GDoubleStack
 {
 	private:
-		/*	PRIVATE FIELDS
-		 *	==============
-		 *	data:	The table of double values.
-		 *	counter: Counts the amount of elements in data.
-		 * */
+         /**
+         * @brief data The table of double values.
+         */
 		double *data;
+        /**
+         * @brief counter Counts the amount of elements in data.
+         */
 		int counter;
 	public:
-		/*	PUBLIC FIELDS
-		 *	=============
-		 *	GDoubleStack():		The default constructor of the class.
-		 *	size():			It returns the amount of elements on the stack.
-		 *	push(x):		It adds the x at the end of the stack.
-		 *	top():			It returns the most top element of the stack.
-		 *	pop():			It removes the most top element of the stack.
-		 *	clear():		It clears the stack.
-		 *	~GDoubleStack():	It deallocates the memory of the stack.
-		 * */
+        /**
+         * @brief GDoubleStack The default constructor of the class.
+         */
 		GDoubleStack();
+        /**
+         * @brief size It returns the amount of elements on the stack.
+         * @return
+         */
 		int  	size() const;
+        /**
+         * @brief push It adds the x at the end of the stack.
+         * @param x
+         */
 		void 	push(double x);
+        /**
+         * @brief top It returns the most top element of the stack.
+         * @return
+         */
 		double  top() const;
+        /**
+         * @brief pop It removes the most top element of the stack.
+         * @return
+         */
 		double 	pop();
+        /**
+         * @brief clear It clears the stack.
+         */
 		void	clear();
+
+        /** @brief It deallocates the memory of the stack.
+         */
 		~GDoubleStack();
 };
 

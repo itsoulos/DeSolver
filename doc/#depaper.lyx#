@@ -324,29 +324,7 @@ noprefix "false"
 
 \end_inset
 
- the software details are presented, in section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Experimental-results"
-plural "false"
-caps "false"
-noprefix "false"
-
-\end_inset
-
- the experimental results for some differential equations are presented
- and finally in section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Conclusions"
-plural "false"
-caps "false"
-noprefix "false"
-
-\end_inset
-
- some conclusions and guidelines for future improvements of the method and
- the accompanyied software are given.
+the prop
 \end_layout
 
 \begin_layout Section
